@@ -9,6 +9,7 @@
   "author": "Azim",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^5.3.0",
     "nodemon": "^3.0.1"
   }
 }
