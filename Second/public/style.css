@@ -1,0 +1,128 @@
+body{
+  margin: 0;
+  padding: 0;
+  top: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* footer part */
+footer{
+  color: rgb(62, 130, 189);
+  background-color: bisque;
+  height: 50px;
+  width: 100%;
+}
+footer p{
+  text-align: center;
+  line-height: 3rem;
+}
+.container{
+  height: 961px;
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+  background-image: url(erol-ahmed-IHL-Jbawvvo-unsplash.jpg);
+  background-size: cover;
+  display: flex;
+  position: absolute;
+}
+fieldset{
+  text-align: center;
+  align-items: center;
+  /* border: none; */
+  margin: auto;
+  height: 450px;
+  width: 350px;
+  border-radius: 20px;
+  /* background-image: url(back.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat; */
+  box-shadow: 0 0 25px white;
+}
+img {
+  position: relative;
+  height: 100px;
+  width: 100px;
+  border: 5px soild white;
+  border-radius: 100px;
+}
+legend{
+  text-align: center;
+}
+.sec-1{
+  margin-top: 40px;
+  margin-bottom: 15px;
+}
+.sec-2{
+  margin-bottom: 15px;
+}
+.sec-3{
+  margin-bottom: 8px;
+}
+.email{
+  color: white;
+  margin-right: 10px;
+}
+.lock{
+  color: white;
+  margin-right: 10px;
+
+}
+.emailin{
+  border: 2px solid white;
+  border-radius: 5px;
+  width: 200px;
+  height: 25px;
+  padding: 10px;
+  text-align: center;
+}
+.emailin:focus{
+  box-shadow: 0 0 25px white;
+}
+.pass{
+  border: 2px solid white;
+  border-radius: 5px;
+  width: 200px;
+  height: 25px;
+  padding: 10px;
+  text-align: center;
+}
+.pass:focus{
+  box-shadow: 0 0 25px white;
+}
+.sec-3 button{
+  border: 2px solid black;
+  border-radius: 5px;
+  font-family:'Poppins', sans-serif;
+  cursor: pointer;
+  padding: 10px;
+  background-color: rgb(241, 151, 40);
+  color: white;
+  transition: all .5s;
+
+}
+.sec-4 button{
+  border: 2px solid black;
+  border-radius: 5px;
+  font-family:'Poppins', sans-serif;
+  cursor: pointer;
+  padding: 5px;
+  background-color: rgb(241, 151, 40);
+  color: white;
+  width: 135px; 
+  height: 45px; 
+  transition: all .5s;
+  font-size: 18px;
+}
+.container button:hover{
+  background-color: white;
+  color: black;
+}
+@media only screen and (max-width:750px) {
+  body{
+      background-position: center;
+      background-size: cover;
+      font-family: 'Poppins', sans-serif;
+      /* background-repeat: no-repeat; */
+  }
+}

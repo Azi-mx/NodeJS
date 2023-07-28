@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login-Form</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+        integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+</head>
+<body>
+    <div class="container">
+    <fieldset>
+        {{>image}}
+        <form action="">
+            <h1 style="color: white;">Registration Form</h1>
+            <div class="sec-1">
+                <i class="fa-solid fa-envelope icon-email email"></i>
+                <input class="emailin"type="email" placeholder="Enter Your Email">
+            </div>
+            <div class="sec-2">
+                <i class="fa-solid fa-lock icon-lock lock"></i>
+                <input class="pass" type="password" placeholder="Enter Your Password">
+            </div>
+            <div class="sec-3">
+                <button> Forget Password </button>
+            </div>
+            <div class="sec-3">
+                <button>{{varName}} </button>
+            </div>
+            {{!-- using partials --}}
+            {{>header}}
+        </form>
+    </fieldset>
+</div>
+</body>
+</html>
