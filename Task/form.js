@@ -13,7 +13,6 @@ app.get('/',(req,res)=>{
 
 app.get('/user',(req,res)=>{
     res.sendFile(mainpath+'form.html')
-    res.send()
 })
 app.get('/savedata',(req,res)=>{
     res.write("Name is"+ req.query.name)
