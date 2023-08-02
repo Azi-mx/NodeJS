@@ -7,11 +7,30 @@
 </head>
 <body>
     <form action="/savedata" method="post">
+        <input type="hidden" name="id" value="<%= editdata.id %>">
         Name:
-        <input type="text" name="name">
+        <input type="text" name="name" value="<%= editdata.name %>">
         Age:
-        <input type="number" name="age">
-        <input type="submit">
+        <input type="number" name="age" value="<%= editdata.age %>">
+        <input type="submit" value="Submit">
     </form>
+    <table border="2">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Action</th>
+        </tr>
+        <%data.forEach((item)=>{%>
+            <tr>
+                <td><%=item.id%></td>
+                <td><%=item.name%></td>
+                <td><%=item.age%></td>
+
+                <td><a href="/del/<%=item.id%>">Delete</a>
+                    <a href="/edit/<%=item.id%>">Edit</a></td>
+            </tr>
+        <%})%>
+    </table>
 </body>
 </html>

@@ -80,3 +80,20 @@ const getDocument = async ()=>{
     }
 }
 getDocument();
+//Update using mongoose
+const updateDocument = async (_id)=>{
+    try{
+        // const result =  await Playlist.updateOne({_id},{
+        const result =  await Playlist.findByIdAndUpdate({_id},{
+
+            $set:{
+            name:"Lakshmi new"
+           }
+        },{useFindAndModify:false})
+        console.log(result);
+    }catch(err){
+            console.log(err);
+    }
+   
+}
+updateDocument("64c8002fbd11e344f566d5b9");
