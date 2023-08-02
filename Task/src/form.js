@@ -3,9 +3,11 @@ const app = express();
 
 const path = require('path');
 
-const mainpath = path.join(__dirname,"/");
+const mainpath = path.join(__dirname,"../Public");
 app.use(express.static(mainpath));
 
+
+app.set("views","ejs")
 app.get('/',(req,res)=>{
     res.write("<h1>Hello World</h1>")
     res.send()
