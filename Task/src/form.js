@@ -68,7 +68,11 @@ app.post('/savedata',bodyparse,(req,res)=>{
     }
     userdata.push(data);
 }
-    res.redirect('/form');
+   editdata = '';
+   res.render('index',{
+    data:userdata,
+    editdata:editdata
+   })
 })
 
 
