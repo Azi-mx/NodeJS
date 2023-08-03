@@ -6,9 +6,17 @@ mongoose.connect("mongodb://localhost:27017/azimdatabase",{useNewUrlParser:true}
 const playlistSchema = new mongoose.Schema({
     name:{
         type:String,
-        required:true
+        required:true//Validation
     },
-    age:Number,
+    age:{
+        type:Number,
+        required:true,
+        validate(value){
+            if(value<18){
+                throw new Error("Not valid")
+            }
+        }
+    },
     job:String,
     date:{
         type:Date,
@@ -29,7 +37,7 @@ const createDocument = async ()=>{
         })
         const secondPlaylist = new Playlist({
             name:"Sachi",
-            age:29,
+            age:9,
             job:"Consultant"
         })
         const thirdPlaylist = new Playlist({
@@ -79,7 +87,7 @@ const getDocument = async ()=>{
         console.log(err)
     }
 }
-getDocument();
+// getDocument();
 //Update using mongoose
 const updateDocument = async (_id)=>{
     try{
@@ -96,4 +104,14 @@ const updateDocument = async (_id)=>{
     }
    
 }
-updateDocument("64c8002fbd11e344f566d5b9");
+// updateDocument("64c8002fbd11e344f566d5b9");
+
+//Delte Document using mongoose
+const DeleteDoc = async(_id)=>{
+    try{
+        let result = await Playlist.deleteOne({_id})
+    }catch(err){
+        console.log(err);
+    }
+}
+// DeleteDoc("64c8002fbd11e344f566d5b9")
