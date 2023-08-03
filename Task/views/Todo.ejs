@@ -12,24 +12,48 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.standalone.min.css">
 </head>
 <body>
-    <div class="card">
-        <h1>Todo List</h1>
-        <ul>
-            <li>Groceries
-                <ul>
-                    <li>3 Tomatoes</li>
-                    <li>1 bunch of cherries</li>
-                    <li>6 onions</li>
-                    <li class="done">3 heads of garlic</li>
-                    <li>1 bag spring mix</li>
-                </ul>
-            </li>
-            <li class="done">Cancel gym membership</li>
-            <li>Clean gutters</li>
-            <li class="done">Take package to the post office</li>
-            <li>Call Avery about Ali's party (afternoon)</li>
-            <li>Sort recycling & put out trash</li>
-        </ul>
+    <div class="holder d-flex align-items-center justify-content-center">
+    
+        <div class="container">
+            <!-- FOR DEMO PURPOSE -->
+            <header class="text-center mb-5">
+                <h1 class="display-4">Todo check list</h1>
+            </header>
+    
+            
+            <div class="row">
+                <div class="col-lg-5 mx-auto">
+    
+                    <!-- CHECKBOX LIST -->
+
+                    <div class="card rounded border-1 shadow-sm position-relative">
+                        <div class="card-body p-5">
+                            <div class="d-flex align-items-center mb-4 pb-4 border-bottom"><i class="far fa-calendar-alt fa-3x"></i>
+                                <div class="ms-3">
+                                    <h4 class="text-uppercase fw-weight-bold mb-0">Wednesday</h4>
+                                    <p class="text-gray fst-italic mb-0">05 December 2023</p>
+                                </div>
+                            </div>
+                            <form action="/savedata" method="post">
+                                <input type="text" name="name" id="name" value="<%= (editdata.id != '')?editdata.task:'' %>">  
+                               <input type="hidden" name="id" id="id" value="<%=(editdata.id != '')?editdata.id:'' %>">
+                            <input type="submit" value="Submit">
+                                <br>
+                                <br>
+                        <%tasks.forEach((i)=>{%>
+                            <div class="form-check mb-3  d-flex justify-content-between">
+                                <input class="form-check-input" id="flexCheck1" type="checkbox">
+                                <label class="form-check-label" for="flexCheck1"><span class="fst-italic pl-1"><%=i.task%></span></label>
+                               <a href="/del/<%=i.id%>" class="btn btn-danger">Delete</a>  
+                               <a href="/edit/<%=i.id%>" class="btn btn-success">Edit</a>  
+                            </div>
+                            <%})%>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
