@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const validator = require('validator')
 //Creating connection and create new db
 mongoose.connect("mongodb://localhost:27017/azimdatabase",{useNewUrlParser:true}).then(()=>{
     console.log("Connection succesfully established")
@@ -6,7 +7,7 @@ mongoose.connect("mongodb://localhost:27017/azimdatabase",{useNewUrlParser:true}
 const playlistSchema = new mongoose.Schema({
     name:{
         type:String,
-        required:true//Validation
+        required:true//Validation   
     },
     age:{
         type:Number,
@@ -21,6 +22,15 @@ const playlistSchema = new mongoose.Schema({
     date:{
         type:Date,
         default:Date.now
+    },
+    email:{
+        type:String,
+        required:true,
+        validate(val){
+            if(!validator.isEmail(val)){
+                throw new Error('Email invalid')
+            }
+        }
     }
 })
 //Collection creation

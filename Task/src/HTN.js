@@ -11,11 +11,11 @@ app.set('view engine', 'ejs')
 app.get('/Home',(req,res)=>{
     res.render('index')
 })
-app.get('/AboutUS',(req,res)=>{
+app.get('/About',(req,res)=>{
     res.render('about')
 })
 app.get('/Contact',(req,res)=>{
-    res.render('service')
+    res.render('contact')
 })
 app.get('/User',(req,res)=>{
     res.render('form')
