@@ -6,6 +6,9 @@ const path = require('path')
 const mainpath = path.join(__dirname, '../Public/css/')
 console.log(mainpath);
 app.use(express.static(mainpath))
+const imgpath = path.join(__dirname, '../Public/images/')
+console.log(mainpath);
+app.use(express.static(imgpath))
 app.set('view engine', 'ejs')
 
 app.get('/Home',(req,res)=>{
