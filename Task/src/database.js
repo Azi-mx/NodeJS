@@ -1,5 +1,8 @@
 const express = require('express');
 const app = express();
+const mongo = require('mongodb');
+const MongoClient = mongo.MongoClient;
+const url = 'mongodb://127.0.0.1:27017/';
 const body = require('body-parser');
 const path = require('path');
 
@@ -10,6 +13,19 @@ app.use(express.static(mainpath));
 
 app.set("view engine","ejs")
 const bodyparse = body.urlencoded({extended:false})
+
+const client = new MongoClient(url);
+app.get('/',(req,res)=>{
+    res.send("Hello");
+})
+async function main() {
+    try{
+        await client.connect();
+        console.log("Database connection established");
+        const db = client.db('studentdb');
+        const collection = db.collection('studentdb');
+        const udata = await collection.find({}).toArray();
+        //insert into collection
 
 let editdata = ''
 let userdata = [
@@ -31,25 +47,25 @@ let userdata = [
 ]
 
 app.get('/form',(req,res)=>{
-    res.render('index',{
-        data:userdata,
+    res.render('form',{
+        data:udata,
         editdata:editdata
     })
 })
 
-app.get('/del/:id',(req,res)=>{
+app.get('/del/:id', async (req,res)=>{
     let id = req.params.id;
     id = id-1;
-    userdata.splice(id,1)
+    udata.splice(id,1)
     let j=1;
     userdata.forEach((i)=>{
         i.id=j;
         j++
     })
-    res.redirect('/form')
+    res.redirect('form')
 })
 
-app.post('/savedata',bodyparse,(req,res)=>{
+app.post('/savedata',bodyparse, async (req,res)=>{
     id = req.body.id;
     if(id != ''){
         //update
@@ -63,17 +79,18 @@ app.post('/savedata',bodyparse,(req,res)=>{
     else{
         //push
     let data = {
-        id: userdata.length+1,
+        id: udata.length+1,
         name:req.body.name,
         age:req.body.age
     }
     
-    userdata.push(data);
+    udata.push(data);
+    let result = await collection.insertOne(data);
 
 }
    editdata = '';
-   res.render('index',{
-    data:userdata,
+   res.render('form',{
+    data:udata,
     editdata:editdata
    })
 })
@@ -86,7 +103,7 @@ app.get('/edit/:id',(req,res)=>{
     // console.log('Edit Data:', editdata);
     // console.log(editdata)
 
-        res.render('index',{
+        res.render('form',{
             data:userdata,
             editdata:editdata
         })
@@ -99,14 +116,26 @@ app.get('/',(req,res)=>{
     res.send()
 })
 
-app.get('/user',(req,res)=>{
-    res.sendFile(mainpath+'/form.html')
+
+// app.get('/savedata',(req,res)=>{
+//     res.write("Name is"+ req.query.name)
+//     res.write("Email is" + req.query.email)
+//     res.send()
+// })
+        
+
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+main();
+
+app.listen(8000,()=>{
+    console.log("Database connection established");
 })
-app.get('/savedata',(req,res)=>{
-    res.write("Name is"+ req.query.name)
-    res.write("Email is" + req.query.email)
-    res.send()
-})
-app.listen(8000,"localhost",()=>{
-    console.log("Server running");
-})
+
+
+
+
+
