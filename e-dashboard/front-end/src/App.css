@@ -24,6 +24,25 @@
   width:100%;
   background-color: skyblue;
 }
+.register{
+  margin-left: 30%;
+}
+.inputBox{
+  display: block;
+  margin: 25px;
+  padding: 7px;
+  width: 300px;
+  border: 1px solid skyblue;
+}
+
+.app-button{
+  margin: 30px;
+  padding: 10px;
+  width: 150px;
+  background-color: skyblue;
+  border:1px solid;
+  cursor: pointer;
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;

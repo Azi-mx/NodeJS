@@ -2,12 +2,23 @@ const express = require('express');
 const app = express();
 //require path of database
 require("./db/conn")    
+
 const Student = require('./models/students')
+
+
+// To make router work 
 const Studentrouter = require('./routers/student')
 const port = process.env.PORT || 3000;
 
+
+//To get data in proper json format this is used
+//We can get data from anywhere like postman, dynamically anywhere
 app.use(express.json());
+
+//To make router work this is necessary
 app.use(Studentrouter);
+
+
 app.get('/',(req,res)=>{
     res.send("Hello");
 })
