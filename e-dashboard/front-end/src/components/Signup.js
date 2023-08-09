@@ -16,7 +16,7 @@ export default function Signup() {
 
     const collectData = async ()=>{
         console.warn(name,email,password)
-        //Here api is integrated using fetch method and the data will only fetch when localhost is running
+        //Here api is integrated using fetch method and the data will only fetch when localhost is running on local
         let result = await fetch('http://localhost:8000/register',
         {
           method:'post',
