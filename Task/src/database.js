@@ -25,6 +25,7 @@ async function main() {
         const db = client.db('studentdb');
         const collection = db.collection('studentdb');
         const udata = await collection.find({}).toArray();
+
         //insert into collection
 
 let editdata = ''
@@ -53,33 +54,41 @@ app.get('/form',(req,res)=>{
     })
 })
 
-app.get('/del/:id', async (req,res)=>{
-    let id = req.params.id;
-    id = id-1;
-    udata.splice(id,1)
-    let j=1;
-    userdata.forEach((i)=>{
-        i.id=j;
-        j++
+//Delete student
+app.get('/del/:name', async (req,res)=>{
+    let name = req.params.name;
+    let d = await collection.deleteOne({name:name})
+    let f = await collection.find({}).toArray();
+    
+    res.render('form',{
+        data:f,
+        editdata:editdata
     })
-    res.redirect('form')
 })
 
 app.post('/savedata',bodyparse, async (req,res)=>{
     id = req.body.id;
     if(id != ''){
+        console.log("id is " + id)
         //update
-        userdata.find((i)=>{
+        udata.find((i)=>{
             if(i.id==id){
                 i.name = req.body.name;
                 i.age = req.body.age
             }
         })
+        let finalUpdate = await collection.updateOne({
+            id:id
+        },{ $set:{
+            name:req.body.name,
+            age:req.body.age
+        }})
+        console.log(finalUpdate)
     }
     else{
         //push
     let data = {
-        id: udata.length+1,
+        id: (udata.length+1).toString(),
         name:req.body.name,
         age:req.body.age
     }
@@ -89,22 +98,24 @@ app.post('/savedata',bodyparse, async (req,res)=>{
 
 }
    editdata = '';
-   res.render('form',{
-    data:udata,
-    editdata:editdata
-   })
+   res.redirect('/form');
 })
 
 
-app.get('/edit/:id',(req,res)=>{
-    let id = req.params.id;
+app.get('/edit/:name',(req,res)=>{
+    let name = req.params.name;
+    console.log(name);
+    // let age = req.body.age;
+    // console.log(age);
     // console.log('Requested ID:', id);
-     editdata = userdata.find((i)=>i.id == id);
+     editdata = udata.find((i)=>i.id == name);
+    //  editdata += editdata.name = name;
+    //  editdata += editdata.age = age;
     // console.log('Edit Data:', editdata);
     // console.log(editdata)
 
         res.render('form',{
-            data:userdata,
+            data:udata,
             editdata:editdata
         })
    
