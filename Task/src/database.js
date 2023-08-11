@@ -6,9 +6,28 @@ const url = 'mongodb://127.0.0.1:27017/';
 const body = require('body-parser');
 const path = require('path');
 
+const multer = require('multer');
+let imgname = '';
+// const upload = multer({ dest: 'uploads/' })
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, '/uploads')
+    },
+    filename: function (req, file, cb) {
+       imgname = Date.now() +file.originalname 
+    }
+  })
+const upload = multer({ storage: storage })
+
+
+
+
 
 const mainpath = path.join(__dirname,"../Public");
 app.use(express.static(mainpath));
+
+
 
 
 app.set("view engine","ejs")
@@ -66,7 +85,7 @@ app.get('/del/:name', async (req,res)=>{
     })
 })
 
-app.post('/savedata',bodyparse, async (req,res)=>{
+app.post('/savedata',upload.single('image'), async (req,res)=>{
     id = req.body.id;
     if(id != ''){
         console.log("id is " + id)
@@ -75,6 +94,7 @@ app.post('/savedata',bodyparse, async (req,res)=>{
             if(i.id==id){
                 i.name = req.body.name;
                 i.age = req.body.age
+                // i.image = 
             }
         })
         let finalUpdate = await collection.updateOne({
@@ -87,10 +107,12 @@ app.post('/savedata',bodyparse, async (req,res)=>{
     }
     else{
         //push
+        let ide = udata.length+1
     let data = {
-        id: (udata.length+1).toString(),
+        id: ide.toString(),
         name:req.body.name,
         age:req.body.age
+
     }
     
     udata.push(data);
@@ -98,7 +120,9 @@ app.post('/savedata',bodyparse, async (req,res)=>{
 
 }
    editdata = '';
-   res.redirect('/form');
+  
+    res.redirect('/form')
+
 })
 
 
