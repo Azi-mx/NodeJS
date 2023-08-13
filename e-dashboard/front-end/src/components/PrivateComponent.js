@@ -6,3 +6,5 @@ export default function PrivateComponent() {
   return auth?<Outlet/>:<Navigate to="/signup" />
   
 }
+
+

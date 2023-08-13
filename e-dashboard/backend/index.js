@@ -4,14 +4,20 @@ require('./db/config');
 const User = require('./db/User');
 const cors = require('cors');
 
-app.use(cors())
+// Here we are importing collection of products from products.js we can say we are importing the model
+const Product = require('./db/Product');
+app.use(cors());
 
+// express.json() method is used to get data in proper json format
 app.use(express.json())
+// This code is to register new user in database
 app.post('/register', async (req, res) => {
     try {
         let user = new User(req.body)
         let Createuser = await user.save();
         Createuser = Createuser.toObject();
+
+        //Here we are removing password from stored variable so that password doesnt comes to us
         delete Createuser.password;
         res.status(200).send(Createuser)
     } catch (err) {
@@ -30,6 +36,20 @@ app.post('/login', async (req, res) => {
             res.send("no result found")
         }
     }
+})
+app.get('/products',async (req,res)=>{
+    let products = await Product.find()
+    if(products.length>0){
+        res.send(products)
+    }
+    else{
+        res.send({result:"No products Found"})
+    }
+})
+app.post('/add-product',async (req,res)=>{
+    let product = new Product(req.body);
+    let result = await product.save();
+    res.send(result);
 })
 app.get('/', (req, res) => {
     res.send("hello World")
