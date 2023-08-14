@@ -12,12 +12,14 @@ let imgname = '';
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, '/uploads')
+      cb(null, './uploads')
     },
     filename: function (req, file, cb) {
        imgname = Date.now() +file.originalname 
+       return cb(null, imgname)
     }
   })
+
 const upload = multer({ storage: storage })
 
 
@@ -26,7 +28,7 @@ const upload = multer({ storage: storage })
 
 const mainpath = path.join(__dirname,"../Public");
 app.use(express.static(mainpath));
-
+app.use(express.static('uploads'));
 
 
 
@@ -66,9 +68,10 @@ let userdata = [
     }
 ]
 
-app.get('/form',(req,res)=>{
+app.get('/form',async(req,res)=>{
+    let f = await collection.find({}).toArray();
     res.render('form',{
-        data:udata,
+        data:f,
         editdata:editdata
     })
 })
@@ -76,6 +79,15 @@ app.get('/form',(req,res)=>{
 //Delete student
 app.get('/del/:name', async (req,res)=>{
     let name = req.params.name;
+
+    let id = req.params.id;
+    id = id-1;
+    userdata.splice(id,1)
+    let j=1;
+    udata.forEach((i)=>{
+        i.id=j;
+        j++
+    })
     let d = await collection.deleteOne({name:name})
     let f = await collection.find({}).toArray();
     
@@ -84,6 +96,7 @@ app.get('/del/:name', async (req,res)=>{
         editdata:editdata
     })
 })
+
 
 app.post('/savedata',upload.single('image'), async (req,res)=>{
     id = req.body.id;
@@ -94,7 +107,7 @@ app.post('/savedata',upload.single('image'), async (req,res)=>{
             if(i.id==id){
                 i.name = req.body.name;
                 i.age = req.body.age
-                // i.image = 
+                
             }
         })
         let finalUpdate = await collection.updateOne({
@@ -111,8 +124,8 @@ app.post('/savedata',upload.single('image'), async (req,res)=>{
     let data = {
         id: ide.toString(),
         name:req.body.name,
-        age:req.body.age
-
+        age:req.body.age,
+        image:imgname
     }
     
     udata.push(data);
@@ -158,7 +171,6 @@ app.get('/',(req,res)=>{
 //     res.send()
 // })
         
-
     }
     catch(err){
         console.log(err);

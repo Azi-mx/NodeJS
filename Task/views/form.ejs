@@ -28,7 +28,7 @@
                 <td><%=item.id%></td>
                 <td><%=item.name%></td>
                 <td><%=item.age%></td>
-                <td>Image</td>
+                <td><img src="<%= item.image%>" alt="User image" height="50px" width="50px"/></td>
 
                 <td><a href="/del/<%=item.name%>">Delete</a>
                     <a href="/edit/<%=item.id%>">Edit</a></td>
