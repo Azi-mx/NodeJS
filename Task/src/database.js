@@ -5,8 +5,9 @@ const MongoClient = mongo.MongoClient;
 const url = 'mongodb://127.0.0.1:27017/';
 const body = require('body-parser');
 const path = require('path');
-
+const fs = require('fs');
 const multer = require('multer');
+const { log } = require('console');
 let imgname = '';
 // const upload = multer({ dest: 'uploads/' })
 
@@ -36,9 +37,7 @@ app.set("view engine","ejs")
 const bodyparse = body.urlencoded({extended:false})
 
 const client = new MongoClient(url);
-app.get('/',(req,res)=>{
-    res.send("Hello");
-})
+
 async function main() {
     try{
         await client.connect();
@@ -50,23 +49,6 @@ async function main() {
         //insert into collection
 
 let editdata = ''
-let userdata = [
-    {
-        id:1,
-        name:"Vishal",
-        age:20
-    },
-    {
-        id:2,
-        name:"Kuntesh",
-        age:23
-    },
-    {
-        id:3,
-        name:"Bharat",
-        age:26
-    }
-]
 
 app.get('/form',async(req,res)=>{
     let f = await collection.find({}).toArray();
@@ -77,24 +59,33 @@ app.get('/form',async(req,res)=>{
 })
 
 //Delete student
-app.get('/del/:name', async (req,res)=>{
-    let name = req.params.name;
-
+app.get('/del/:id', async (req,res)=>{
     let id = req.params.id;
-    id = id-1;
-    userdata.splice(id,1)
-    let j=1;
-    udata.forEach((i)=>{
-        i.id=j;
-        j++
-    })
-    let d = await collection.deleteOne({name:name})
+    
+    // let id = req.params.id;
+    // id = id-1;
+    // udata.splice(id,1)
+    // let j=1;
+    // udata.forEach((i)=>{
+    //     i.id=j;
+    //     j++
+    // })
+    let userdata = await collection.findOne({id:id});
+    console.log(userdata);
+    imgname = 'uploads/'+userdata.image;
+    console.log(imgname);
+    fs.unlink(imgname,()=>{
+        console.log("deleted");
+    });
+    let d = await collection.deleteOne({id:id})
     let f = await collection.find({}).toArray();
     
-    res.render('form',{
-        data:f,
-        editdata:editdata
-    })
+    // res.render('form',{
+    //     data:f,
+    //     editdata:editdata
+    // })
+    res.redirect('/form')
+
 })
 
 
@@ -114,7 +105,8 @@ app.post('/savedata',upload.single('image'), async (req,res)=>{
             id:id
         },{ $set:{
             name:req.body.name,
-            age:req.body.age
+            age:req.body.age,
+            image:imgname
         }})
         console.log(finalUpdate)
     }
