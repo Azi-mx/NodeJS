@@ -11,6 +11,7 @@ const { log } = require('console');
 let imgname = '';
 // const upload = multer({ dest: 'uploads/' })
 
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, './uploads')
@@ -91,22 +92,37 @@ app.get('/del/:id', async (req,res)=>{
 
 app.post('/savedata',upload.single('image'), async (req,res)=>{
     id = req.body.id;
+    editdata= '';
+    editdata = udata.find((i)=> i.id==id)
+    let oldimg = (imgname!= '')?imgname:'';
+
+    
     if(id != ''){
-        console.log("id is " + id)
+        if(imgname != ''){
+            let img = 'uploads/'+editdata.image
+            fs.unlink(img,()=>{
+                console.log("deleted");
+            })
+        }
+        // console.log("id is " + id)
         //update
+      
         udata.find((i)=>{
             if(i.id==id){
                 i.name = req.body.name;
                 i.age = req.body.age
-                
+                i.image = (imgname!= undefined)?imgname:oldimg;
             }
+
+
         })
+        
         let finalUpdate = await collection.updateOne({
             id:id
         },{ $set:{
             name:req.body.name,
             age:req.body.age,
-            image:imgname
+            image:(imgname!= undefined)?imgname:oldimg 
         }})
         console.log(finalUpdate)
     }
@@ -131,18 +147,10 @@ app.post('/savedata',upload.single('image'), async (req,res)=>{
 })
 
 
-app.get('/edit/:name',(req,res)=>{
-    let name = req.params.name;
-    console.log(name);
-    // let age = req.body.age;
-    // console.log(age);
-    // console.log('Requested ID:', id);
-     editdata = udata.find((i)=>i.id == name);
-    //  editdata += editdata.name = name;
-    //  editdata += editdata.age = age;
-    // console.log('Edit Data:', editdata);
-    // console.log(editdata)
-
+app.get('/edit/:id',(req,res)=>{
+    let id = req.params.id;
+    // console.log(name);
+     editdata = udata.find((i)=>i.id == id);
         res.render('form',{
             data:udata,
             editdata:editdata
