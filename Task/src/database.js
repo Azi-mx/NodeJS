@@ -7,7 +7,10 @@ const body = require('body-parser');
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
-const { log } = require('console');
+
+
+const bodyparse = body.urlencoded({extended:false})
+
 let imgname = '';
 // const upload = multer({ dest: 'uploads/' })
 
@@ -35,7 +38,6 @@ app.use(express.static('uploads'));
 
 
 app.set("view engine","ejs")
-const bodyparse = body.urlencoded({extended:false})
 
 const client = new MongoClient(url);
 
@@ -98,7 +100,7 @@ app.post('/savedata',upload.single('image'), async (req,res)=>{
 
     
     if(id != ''){
-        if(imgname != ''){
+        if(req.file && imgname != ''){
             let img = 'uploads/'+editdata.image
             fs.unlink(img,()=>{
                 console.log("deleted");
@@ -111,7 +113,7 @@ app.post('/savedata',upload.single('image'), async (req,res)=>{
             if(i.id==id){
                 i.name = req.body.name;
                 i.age = req.body.age
-                i.image = (imgname!= undefined)?imgname:oldimg;
+                i.image = (req.file && imgname!= '')?imgname:oldimg;
             }
 
 

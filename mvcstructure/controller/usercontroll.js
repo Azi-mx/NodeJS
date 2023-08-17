@@ -20,4 +20,8 @@ const getDashboard = async(req,res)=>{
 const getForm = (req,res)=>{
     res.render('form')
 }
-module.exports = {getDashboard, getForm,employee}
+const getPostdata = (req,res)=>{
+    console.log(req.body);
+    res.send("sucessful")
+}
+module.exports = {getDashboard, getPostdata,getForm,employee}
