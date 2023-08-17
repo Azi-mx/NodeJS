@@ -13,6 +13,9 @@ const getPostdata = async (req,res)=>{
         password:req.body.password
     })
     const res1 = await result.save();
-    req.redirect('/admin/data')
+    console.log('User saved successfully');
+    console.log(res1);
+    // res.send(res1)
+    res.redirect('/admin/form')
 }
 module.exports = {getDashboard, getPostdata,getForm}
