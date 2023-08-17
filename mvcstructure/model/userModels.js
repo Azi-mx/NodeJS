@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 //This method returns a promise
-mongoose.connect("mongodb://127.0.0.1:27017/employees",{useNewUrlParser:true}).then(()=>{
-    console.log("Connection established");
-}).catch((err)=>{
-    console.log(err);
-})
+const main  = async()=>{
+    try{
+        await mongoose.connect("mongodb://127.0.0.1:27017/employees",{useNewUrlParser:true})
+        console.log("Connection Established Success");
+    }catch(err){
+        console.log(err);
+    }
+}
+main();
 const empSchema = new mongoose.Schema({
     id:Number,
     name:String,

@@ -94,6 +94,7 @@ app.get('/del/:id', async (req,res)=>{
 
 app.post('/savedata',upload.single('image'), async (req,res)=>{
     id = req.body.id;
+    gamme = req.body.name;
     editdata= '';
     editdata = udata.find((i)=> i.id==id)
     let oldimg = (imgname!= '')?imgname:'';
@@ -129,6 +130,7 @@ app.post('/savedata',upload.single('image'), async (req,res)=>{
         console.log(finalUpdate)
     }
     else{
+        if(gamme != ''){
         //push
         let ide = udata.length+1
     let data = {
@@ -140,7 +142,7 @@ app.post('/savedata',upload.single('image'), async (req,res)=>{
     
     udata.push(data);
     let result = await collection.insertOne(data);
-
+    }
 }
    editdata = '';
   
