@@ -1,27 +1,18 @@
-const mongoose = require('mongoose');
-
-const empSchema = new mongoose.Schema({
-    name:String,
-    age:Number,
-    email:String
-})
-const employee = new mongoose.model('employee', empSchema)
-
-// const getuser = async(req,res)=>{
-//     res.send("getuser called");
-// }
-
-// const getuserData = async()=>{
-//     console.log("getuserData called");
-// }
+let userModel = require('../model/userModels')
 const getDashboard = async(req,res)=>{
     res.render('index')
 }
 const getForm = (req,res)=>{
     res.render('form')
 }
-const getPostdata = (req,res)=>{
-    console.log(req.body);
-    res.send("sucessful")
+const getPostdata = async (req,res)=>{
+    const result = await userModel({
+        id:1,
+        name:req.body.username,
+        email:req.body.email,
+        password:req.body.password
+    })
+    const res1 = await result.save();
+    req.redirect('/admin/data')
 }
-module.exports = {getDashboard, getPostdata,getForm,employee}
+module.exports = {getDashboard, getPostdata,getForm}
