@@ -11,8 +11,14 @@ const main  = async()=>{
 main();
 const empSchema = new mongoose.Schema({
     id:Number,
-    name:String,
-    email:String,
+    name:{
+        type:String,
+        required:true
+    },
+    email:{
+        type:String,
+        unique:true
+    },
     password:String
 })
 const employee = new mongoose.model('employee', empSchema)
