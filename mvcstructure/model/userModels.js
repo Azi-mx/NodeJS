@@ -11,10 +11,7 @@ const main  = async()=>{
 main();
 const empSchema = new mongoose.Schema({
     id:Number,
-    name:{
-        type:String,
-        required:true
-    },
+    name:String,
     email:{
         type:String,
         unique:true

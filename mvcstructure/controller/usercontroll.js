@@ -1,6 +1,6 @@
 let userModel = require('../model/userModels')
 const getDashboard = async (req, res) => {
-    res.render('index')
+    res.render('index',{username: req.cookies.username})
 }
 const getForm = (req, res) => {
     res.render('form')
@@ -21,18 +21,20 @@ const getPostdata = async (req, res) => {
         console.log('User saved successfully');
         console.log(res1);
         // res.send(res1)
-        res.redirect('/admin/form')
+        res.redirect('/admin/data')
     }
 }
 
 
 const checkUserData = async (req,res)=>{
     let checkuser = await userModel.findOne({ email: req.body.email, password:req.body.password})
+    console.log(checkuser);
     if (checkuser) {
-        return res.send("Email is already in use")
+        res.cookie('Username', checkuser.name)
+        res.redirect('/admin/data')
     }
     else{
-        res.redirect('/admin/form')
+        res.send('Email or password wrong')
     }
 }
 module.exports = { getDashboard, getPostdata, getForm,checkUserData }

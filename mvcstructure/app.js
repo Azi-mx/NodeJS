@@ -1,14 +1,14 @@
 const express = require('express')
 const cookie = require('cookie-parser');
 const app = express();
+app.use(cookie())
 const router = require('./routes/user');
 app.use(router);
 app.use(express.static(__dirname))
-app.use()
-
+ 
 app.set('view engine','ejs')
 
-app.get('/login',(req,res)=>{
+app.get('/',(req,res)=>{
     res.render('login');
 })
 
