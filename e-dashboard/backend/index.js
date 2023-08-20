@@ -106,7 +106,7 @@ app.put('/product/:id', async (req, res) => {
     )
     res.send(result);
 })
-app.get('/search/:key', async (req, res) => {
+app.get('/search/:key',verifyToken, async (req, res) => {
     let result = await Product.find({
         "$or": [
             { name: { $regex: req.params.key } },
@@ -117,9 +117,12 @@ app.get('/search/:key', async (req, res) => {
     })
     res.send(result)
 })
-app.get('/', (req, res) => {
-    res.send("hello World")
-})
+
+function verifyToken(req,res,next){
+    const token = req.headers['authorization'];
+    console.log('middleware called',token);
+    next()
+}
 app.listen(8000, () => {
     console.log("connected");
 })

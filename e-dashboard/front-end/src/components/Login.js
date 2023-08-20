@@ -22,8 +22,15 @@ export default function Login() {
         })
         result = await result.json();
         console.log(result);
-        if(result.name){
-            localStorage.setItem("user",JSON.stringify(result));
+        //Here we are matching the token = auth 
+        if(result.auth){
+
+            //user details are in the user object now
+            localStorage.setItem("user",JSON.stringify(result.user));
+
+          // Here we are saving that token in localstorage
+            localStorage.setItem("token",JSON.stringify(result.auth));
+            
             navigate('/')
         }
         else{

@@ -34,7 +34,12 @@ export default function Signup() {
         ///  .json() method is used to get data in proper format
         result = await result.json()
         console.log(result)
-        localStorage.setItem("user",JSON.stringify(result))
+        // Here we are saving the users's data in localstorage  
+        localStorage.setItem("user",JSON.stringify(result.Createuser))
+
+          // Here we are saving that token in localstorage
+        localStorage.setItem("token",JSON.stringify(result.auth))
+
         if(result){
           navigate('/')
         }

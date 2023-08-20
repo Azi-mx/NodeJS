@@ -8,7 +8,12 @@ function ProductList() {
         getProducts();
     }, [])
     const getProducts = async () => {
-        let result = await fetch('http://localhost:8000/products')
+        let result = await fetch('http://localhost:8000/products',{
+            // Here we are sending token to the backend
+            headers:{
+                authorization:JSON.parse(localStorage.getItem('token'))
+            }
+        })
         result = await result.json()
         setProducts(result);
     }

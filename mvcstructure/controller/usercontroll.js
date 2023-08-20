@@ -1,10 +1,23 @@
 let userModel = require('../model/userModels')
-const getDashboard = async (req, res) => {
-    res.render('index',{username: req.cookies.username})
+
+const checkin = async (req,res) =>{
+    if(req.cookies && req.cookies.Username != 'admin'){
+        return res.redirect('/')
+    }
 }
-const getForm = (req, res) => {
+const getDashboard = async (req, res) => {
+    await checkin(req,res)
+    res.render('index', { username: req.cookies.Username })
+}
+
+
+//This is to render the form 
+const getForm = async (req, res) => {
+    await checkin(req,res)
     res.render('form')
 }
+
+//This is to register user 
 const getPostdata = async (req, res) => {
     let checkuser = await userModel.findOne({ email: req.body.email })
     if (checkuser) {
@@ -26,15 +39,19 @@ const getPostdata = async (req, res) => {
 }
 
 
-const checkUserData = async (req,res)=>{
-    let checkuser = await userModel.findOne({ email: req.body.email, password:req.body.password})
-    console.log(checkuser);
-    if (checkuser) {
-        res.cookie('Username', checkuser.name)
-        res.redirect('/admin/data')
+const checkUserData = async (req, res) => {
+
+    let user = await userModel.findOne({ email: req.body.email, password: req.body.password });
+    console.log('User query result:', user);
+    if (user) {
+        // Your password comparison logic here
+        res.cookie('Username', user.name);
+        res.redirect('/admin/data');
+    } else {
+        req.flash('danger', 'Email or password wrong!')
+        res.render('login', { message: req.flash('danger') });
     }
-    else{
-        res.send('Email or password wrong')
-    }
-}
-module.exports = { getDashboard, getPostdata, getForm,checkUserData }
+
+};
+
+module.exports = { getDashboard, getPostdata, getForm, checkUserData }
