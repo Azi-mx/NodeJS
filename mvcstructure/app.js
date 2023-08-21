@@ -23,6 +23,10 @@ app.set('view engine','ejs')
 app.get('/',(req,res)=>{
     res.render('login',{message:''});
 })
+app.get('/logout',(req,res)=>{
+    res.clearCookie('Username')
+    res.redirect('/')
+})
 
 app.get('/register',(req,res)=>{
     res.render('register')
