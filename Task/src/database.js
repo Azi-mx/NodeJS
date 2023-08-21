@@ -38,7 +38,7 @@ app.use(express.static('uploads'));
 
 
 app.set("view engine","ejs")
-
+  
 const client = new MongoClient(url);
 
 async function main() {
