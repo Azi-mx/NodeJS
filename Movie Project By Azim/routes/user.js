@@ -1,12 +1,13 @@
 const express = require('express');
 const router = new express.Router();
-const userModel = require('../Model/userModel');
-const { getForm } = require('../controller/userControll');
+const userModel = require('../Models/userModel');
+const { getForm,edittdata,deldata} = require('../controller/userControll');
 const body = require('body-parser');
 const bodyParser = body.urlencoded({ extended: false })
 const multer = require('multer');
+const fs = require('fs')
 
-router.get('/form', getForm)
+
 let imgname = '';
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -17,21 +18,23 @@ const storage = multer.diskStorage({
         return cb(null, imgname);
     }
 });
-const { data, deldata, editdata } = require("../controllers/user");
-router.get('/form', data);
+const upload = multer({ storage: storage });
+
+router.get('/form', getForm);
 router.get('/del/:id', deldata);
-router.get('/edit/:id', editdata);
+router.get('/edit/:id', edittdata);
 router.post('/savedata', upload.single('image'), async (req, res) => {
+
     id = req.body.id;
     gamme = req.body.name;
-    editdata = '';
-    editdata = userModel.find((i) => i.id == id)
-    let oldimg = (imgname != '') ? imgname : '';
-
-
+   
     if (id != '') {
+    user = await userModel.find({_id:id})
+
+    let oldimg = (user.image != '') ? user.image : '';
+
         if (req.file && imgname != '') {
-            let img = 'uploads/' + editdata.image
+            let img = 'uploads/' + user.image
             fs.unlink(img, () => {
                 console.log("deleted");
             })
@@ -39,25 +42,15 @@ router.post('/savedata', upload.single('image'), async (req, res) => {
         // console.log("id is " + id)
         //update
 
-        userModel.find((i) => {
-            if (i.id == id) {
-                i.name = req.body.name;
-                i.age = req.body.age
-                i.image = (req.file && imgname != '') ? imgname : oldimg;
-            }
-
-
-        })
-
         let finalUpdate = await userModel.findOneAndUpdate({
             _id: id
         }, {
             $set: {
-                id: (user.length) + 1,
-                moviename: req.body.name,
-                date: req.body.date,
-                charactor: req.body.charactor,
-                image: (imgname != undefined) ? imgname : oldimg
+                Movie_Id: (user.length) + 1,
+                Name: req.body.name,
+                Release_Date: req.body.date,
+                NoOf_MainCharacters: req.body.charactor,
+                PosterImage: (req.file && imgname != '') ? imgname : oldimg
             }
         })
         console.log(finalUpdate)
@@ -65,15 +58,16 @@ router.post('/savedata', upload.single('image'), async (req, res) => {
     else {
         if (gamme != '') {
             //push
-            let ide = userModel.length + 1
-            let data = {
-                id: ide.toString(),
-                name: req.body.name,
-                age: req.body.age,
-                image: imgname
-            }
+            let ide = user.length + 1
+            let data =  new userModel({
+                Movie_Id: ide.toString(),
+                Name: req.body.name,
+                Release_Date: req.body.date,
+                NoOf_MainCharacters: req.body.charactor,
+                PosterImage: imgname
+            })
 
-            userModel.save(data);
+            let b= await data.save();
             
         }
     }

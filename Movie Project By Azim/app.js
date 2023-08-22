@@ -10,9 +10,6 @@ app.use(express.static('uploads'));
 const bodyparse = body.urlencoded({extended:false})
 
 
-app.get('/',()=>{
-    res.send("Running")
-})
 
 app.listen(8000,()=>{
     console.log("File Running and port running 8000");

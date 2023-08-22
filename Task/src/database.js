@@ -65,14 +65,7 @@ app.get('/form',async(req,res)=>{
 app.get('/del/:id', async (req,res)=>{
     let id = req.params.id;
     
-    // let id = req.params.id;
-    // id = id-1;
-    // udata.splice(id,1)
-    // let j=1;
-    // udata.forEach((i)=>{
-    //     i.id=j;
-    //     j++
-    // })
+    
     let userdata = await collection.findOne({id:id});
     console.log(userdata);
     imgname = 'uploads/'+userdata.image;
@@ -83,10 +76,6 @@ app.get('/del/:id', async (req,res)=>{
     let d = await collection.deleteOne({id:id})
     let f = await collection.find({}).toArray();
     
-    // res.render('form',{
-    //     data:f,
-    //     editdata:editdata
-    // })
     res.redirect('/form')
 
 })
