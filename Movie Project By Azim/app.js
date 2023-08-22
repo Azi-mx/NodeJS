@@ -5,6 +5,8 @@ const routes = require('./routes/user');
 app.use(express.static(__dirname))
 app.set("view engine","ejs")
 app.use(routes)
+app.use(express.static('uploads'));
+
 const bodyparse = body.urlencoded({extended:false})
 
 
