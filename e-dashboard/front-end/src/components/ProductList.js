@@ -1,53 +1,68 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 function ProductList() {
+    // State to hold the list of products
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
+        // Call the function to fetch products when the component mounts
         getProducts();
-    }, [])
+    }, []);
+
+    // Function to fetch the list of products from the server
     const getProducts = async () => {
-        let result = await fetch('http://localhost:8000/products',{
-            // Here we are sending token to the backend
-            headers:{
-                authorization:JSON.parse(localStorage.getItem('token'))
+        // Send a GET request to fetch products, including the authorization token
+        let result = await fetch('http://localhost:8000/products', {
+            headers: {
+                authorization:`bearer ${JSON.parse(localStorage.getItem('token'))}`
             }
-        })
-        result = await result.json()
+        });
+
+        // Parse the response as JSON and update the products state
+        result = await result.json();
         setProducts(result);
-    }
-    // console.log('products',products);
+    };
 
-
+    // Function to delete a product by its ID
     const deleteProduct = async (id) => {
-        // console.warn(id);
+        // Send a DELETE request to delete the product by ID
         let result = await fetch(`http://localhost:8000/product/${id}`, {
             method: 'Delete'
-        })
-        result = await result.json()
+        });
+
+        // Parse the response as JSON
+        result = await result.json();
+
         if (result) {
+            // If deletion is successful, refresh the products list
             getProducts();
         }
-    }
+    };
 
+    // Function to handle product search
     const searchhandle = async (event) => {
-        // console.log(event.target.value);
         let key = event.target.value;
-        if(key) {
-            let result = await fetch(`http://localhost:8000/search/${key}`)
+
+        if (key) {
+            // Send a GET request to search for products using the provided key
+            let result = await fetch(`http://localhost:8000/search/${key}`);
             result = await result.json();
+
             if (result) {
+                // Update the products state with the search results
                 setProducts(result);
             }
-        }
-        else{
+        } else {
+            // If search key is empty, refresh the products list
             getProducts();
         }
-    }
+    };
+
     return (
         <div className='product-list'>
             <h1>Product List</h1>
+            {/* Input field for product search */}
             <input type="text" className='search' onChange={searchhandle} placeholder='Search Product' />
             <ul>
                 <li>S. No</li>
@@ -57,26 +72,27 @@ function ProductList() {
                 <li>Company</li>
                 <li>Actions</li>
             </ul>
-            {
-                products.length>0 ? products.map((i, index) =>
-                    <ul key={i._id}>
-                        <li>{index + 1}</li>
-                        <li>{i.name}</li>
-                        <li>${i.price}</li>
-                        <li>{i.category}</li>
-                        <li>{i.company}</li>
-                        {/*Here delete button is functioned by giving it onclick function and passing id in it*/}
-                        <li><button type="button" onClick={() => deleteProduct(i._id)} className="btn btn-danger">Delete</button>
-                            {/*Here update link is added*/}
-                            <Link to={`/update/${i._id}`}><button type="button" className="btn btn-warning">Update</button></Link>
-                        </li>
-                    </ul>
-                )
-                :<h1>No Result Found</h1>
+            {/* Render product list */}
+            {products.length > 0 ? products.map((i, index) =>
+                <ul key={i._id}>
+                    <li>{index + 1}</li>
+                    <li>{i.name}</li>
+                    <li>${i.price}</li>
+                    <li>{i.category}</li>
+                    <li>{i.company}</li>
+                    <li>
+                        {/* Delete button with an onclick handler */}
+                        <button type="button" onClick={() => deleteProduct(i._id)} className="btn btn-danger">Delete</button>
+                        {/* Update button as a Link */}
+                        <Link to={`/update/${i._id}`}><button type="button" className="btn btn-warning">Update</button></Link>
+                    </li>
+                </ul>
+            )
+            :
+            <h1>No Result Found</h1>
             }
         </div>
-    )
-
+    );
 }
 
-export default ProductList
+export default ProductList;

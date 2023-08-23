@@ -23,6 +23,7 @@ export default function () {
         // console.log(userid)
         let result = await fetch('http://localhost:8000/add-product',{
             method:'post',
+          
             body:JSON.stringify({name,price,category,company,userid}),
             headers:{
                 'Content-type':'application/json'
