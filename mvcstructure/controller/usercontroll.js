@@ -1,4 +1,6 @@
 let userModel = require('../model/userModels')
+let brcypt = require('bcrypt');
+const saltrounds = 10;
 
 const checkin = async (req, res) => {
     if (req.cookies && req.cookies.Username != 'admin') {
@@ -19,18 +21,21 @@ const getForm = async (req, res) => {
 
 //This is to register user 
 const getPostdata = async (req, res) => {
-    let checkuser = await userModel.findOne({ email: req.body.email })
-    if (req.body.password && req.body.name && req.body.email) {
+    const {username, email, password} = req.body;
+    let checkuser = await userModel.findOne({email})
+
+    if (req.body.password && req.body.username && req.body.email) {
         if (checkuser) {
             req.flash('info', 'Email is already registered')
             res.render('register', { message: req.flash('info') });
         }
         else {
+            const crypted = await brcypt.hash(password,saltrounds)
             const result = await userModel({
                 id: 1,
                 name: req.body.username,
                 email: req.body.email,
-                password: req.body.password
+                password: crypted
             })
             const res1 = await result.save();
             console.log('User saved successfully');
