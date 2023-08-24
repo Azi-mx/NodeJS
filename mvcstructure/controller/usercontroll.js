@@ -1,5 +1,5 @@
 let userModel = require('../model/userModels')
-let brcypt = require('bcrypt');
+let bcrypt = require('bcrypt');
 const saltrounds = 10;
 
 const checkin = async (req, res) => {
@@ -30,7 +30,7 @@ const getPostdata = async (req, res) => {
             res.render('register', { message: req.flash('info') });
         }
         else {
-            const crypted = await brcypt.hash(password,saltrounds)
+            const crypted = await bcrypt.hash(password,saltrounds)
             const result = await userModel({
                 id: 1,
                 name: req.body.username,
@@ -63,4 +63,15 @@ const checkUserData = async (req, res) => {
 
 };
 
-module.exports = { getDashboard, getPostdata, getForm, checkUserData }
+const checkLoginData = async (req, res) => {
+    let user = await userModel.findOne({email:req.body.email})
+    if(!user){
+        res.send("User not found")
+    }else{
+        const isPasswordValid  = await bcrypt.compare(req.body.password, user.password)
+       
+    }
+    res.redirect('/admin/data')
+}
+
+module.exports = { getDashboard, getPostdata, getForm, checkUserData,checkLoginData}
