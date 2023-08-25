@@ -1,7 +1,16 @@
 let userModel = require('../model/userModels')
+let nodemailer = require('nodemailer')
 let bcrypt = require('bcrypt');
 const saltrounds = 10;
-
+const transporter = nodemailer.createTransport({
+    port:465,
+    host:"smtp.gmail.com",
+    auth:{
+        user:'bagsariyaa@gmail.com',
+        pass:'snhtqcnqvkxjpmyg'
+    },
+    secure:true
+})
 const checkin = async (req, res) => {
     if (req.cookies && req.cookies.Username != 'admin') {
         return res.redirect('/')
@@ -16,7 +25,7 @@ const getDashboard = async (req, res) => {
 //This is to render the form 
 const getForm = async (req, res) => {
     await checkin(req, res)
-    res.render('form')
+    res.render('form',{ username: req.cookies.Username })
 }
 
 //This is to register user 
@@ -30,6 +39,13 @@ const getPostdata = async (req, res) => {
             res.render('register', { message: req.flash('info') });
         }
         else {
+            const mailData = {
+                from:'bagsariyaan@gmail.com',
+                to:email,
+                subject:'Testing the nodemailer',
+                text:"The email is succesfully recieved",
+                html:'<p>This is a p tag</p>'
+            }
             const crypted = await bcrypt.hash(password,saltrounds)
             const result = await userModel({
                 id: 1,
@@ -37,6 +53,7 @@ const getPostdata = async (req, res) => {
                 email: req.body.email,
                 password: crypted
             })
+          await transporter.sendMail(mailData);
             const res1 = await result.save();
             console.log('User saved successfully');
             console.log(res1);
@@ -69,9 +86,14 @@ const checkLoginData = async (req, res) => {
         res.send("User not found")
     }else{
         const isPasswordValid  = await bcrypt.compare(req.body.password, user.password)
-       
+        if(!isPasswordValid){
+            res.send("Password Wrong")
+        }
+        else{
+        res.cookie('Username', user.name);
+        }
     }
     res.redirect('/admin/data')
 }
 
-module.exports = { getDashboard, getPostdata, getForm, checkUserData,checkLoginData}
+module.exports = { getDashboard, getPostdata, getForm,checkLoginData}

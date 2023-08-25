@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = new express.Router();
-const {getDashboard, getForm,getPostdata,checkUserData,checkLoginData} = require('../controller/usercontroll');
+const {getDashboard, getForm,getPostdata,checkLoginData} = require('../controller/usercontroll');
 const body = require('body-parser');
 const bodyParser = body.urlencoded({extended:false})
 
