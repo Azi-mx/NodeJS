@@ -96,4 +96,45 @@ const checkLoginData = async (req, res) => {
     res.redirect('/admin/data')
 }
 
-module.exports = { getDashboard, getPostdata, getForm,checkLoginData}
+//Otp generating function 
+function generateOTP() {
+    const otpLength = 6;
+    let otp = '';
+  
+    for (let i = 0; i < otpLength; i++) {
+      const digit = Math.floor(Math.random() * 10);
+      otp += digit.toString();
+    }
+  
+    return otp;
+  }
+
+  //Here otp is sent to the user
+const Otpgen = async (req, res) => {
+    let user = await userModel.findOne({email:req.body.email})
+    if(!user){
+        res.send("User not found")
+    }else{
+       otp = generateOTP();
+       const transporter = nodemailer.createTransport({
+        port:465,
+        host:"smtp.gmail.com",
+        auth:{
+            user:'bagsariyaa@gmail.com',
+            pass:'snhtqcnqvkxjpmyg'
+        },
+        secure:true
+    })
+    const mailData = {
+        from:'bagsariyaan@gmail.com',
+        to:req.body.email,
+        subject:'Testing the nodemailer',
+        text:"OTP for verification",
+        html:`<p>Your Otp for ${req.body.email} is ${otp}</p>`
+    }
+        await transporter.sendMail(mailData);
+    }
+    res.redirect('/admin/data')
+}
+
+module.exports = { getDashboard, getPostdata, getForm,checkLoginData,Otpgen}
