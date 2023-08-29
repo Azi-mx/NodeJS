@@ -30,7 +30,7 @@ app.get('/logout',(req,res)=>{
 })
 
 app.get('/register',(req,res)=>{
-    res.render('register')
+    res.render('register',{message:''})
 })
 app.listen(8080,()=>{
     console.log('listened on port 8080');
