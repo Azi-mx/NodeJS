@@ -1,3 +1,3 @@
 const mongoose = require('mongoose')
-    mongoose.connect('mongodb://localhost:27017/e-commerce',{useNewUrlParser:true})
+    mongoose.connect('mongodb+srv://azim_memon:afraz123@clusters.l7snngf.mongodb.net/?retryWrites=true&w=majority',{useNewUrlParser:true})
     

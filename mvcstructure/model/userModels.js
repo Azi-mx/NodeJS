@@ -16,7 +16,8 @@ const empSchema = new mongoose.Schema({
         type:String,
         unique:true
     },
-    password:String
+    password:String,
+    otp:Number
 })
 const employee = new mongoose.model('employee', empSchema)
 

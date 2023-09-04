@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = new express.Router();
-const {getDashboard, getForm,getPostdata,checkLoginData,Otpgen,otpverify} = require('../controller/usercontroll');
+const {getDashboard, getForm,getPostdata,checkLoginData,Otpgen,otpverify,changePass} = require('../controller/usercontroll');
 const body = require('body-parser');
 const bodyParser = body.urlencoded({extended:false})
 
@@ -18,6 +18,7 @@ router.post('/admin/savedata',bodyParser,getPostdata)
 // router.post('/checkLogin',bodyParser,checkUserData)
 router.post('/checkLogin',bodyParser,checkLoginData)
 router.post('/otpverify',bodyParser,otpverify)
+router.post('/changePass',bodyParser,changePass)
 
 
 

@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
     secure: true
 })
 const checkin = async (req, res) => {
-    if (req.cookies && req.cookies.Username != 'admin') {
+    if (req.cookies && req.cookies.Username != 'AZIM') {
         return res.redirect('/')
     }
 }
@@ -32,7 +32,7 @@ const getForm = async (req, res) => {
 const getPostdata = async (req, res) => {
     const { username, email, password } = req.body;
     let checkuser = await userModel.findOne({ email })
-
+    
     if (email && username && password) {
         if (checkuser) {
             req.flash('info', 'Email is already registered')
@@ -47,8 +47,10 @@ const getPostdata = async (req, res) => {
                 html: '<p>This is a p tag</p>'
             }
             const crypted = await bcrypt.hash(password, saltrounds)
+            let user = await userModel.find()
+            let len = user.length;
             const result = await userModel({
-                id: 1,
+                id: len+1,
                 name: req.body.username,
                 email: req.body.email,
                 password: crypted
@@ -58,11 +60,13 @@ const getPostdata = async (req, res) => {
             console.log('User saved successfully');
             console.log(res1);
             // res.send(res1)
-            res.redirect('/admin/data')
+            req.flash('info', 'You Have been registered Succesfully')
+            
+            res.render('login',{ message: req.flash('info') })
         }
     }
     else{
-        req.flash('success', 'Please enter your email address and password')
+        req.flash('success', 'Please enter your name, email address and password')
         res.render('register', { message: req.flash('success') });
     }
 }
@@ -87,7 +91,7 @@ const getPostdata = async (req, res) => {
 const checkLoginData = async (req, res) => {
     let user = await userModel.findOne({ email: req.body.email })
 
-    if (!req.body.email && req.body.password) {
+    if (!req.body.email && !req.body.password) {
         req.flash('danger', 'Please Enter Email and Password');
         res.render('login', { message: req.flash('danger') });
     } else {
@@ -102,7 +106,7 @@ const checkLoginData = async (req, res) => {
             }
             else {
                 res.cookie('Username', user.name);
-                res.render('/admin/data')
+                res.render('index',{ username: req.cookies.Username})
             }
         }
     }
@@ -125,7 +129,8 @@ function generateOTP() {
 const Otpgen = async (req, res) => {
     let user = await userModel.findOne({ email: req.body.email })
     if (!user) {
-        res.send("User not found")
+        req.flash('danger', 'Email is not registered! Please Register First!');
+        res.render('otpverify', { message: req.flash('danger') });
     } else {
         otp = generateOTP();
         const transporter = nodemailer.createTransport({
@@ -146,6 +151,8 @@ const Otpgen = async (req, res) => {
         }
         
         await transporter.sendMail(mailData);
+        user.otp = otp
+        user.save();
         res.render('otpverify.ejs',{message:req.body.email})
     }
     
@@ -154,8 +161,32 @@ const otpverify = async(req,res)=>{
     const otp = req.body.otp
     const hid = req.body.hid
     const user = await userModel.findOne({email:hid})
-    console.log(user);
-    
+    if(user.otp == otp){
+        res.render('recoverPass',{message:req.body.hid})
+    }
+    else{
+        req.flash('danger', 'Please Enter correct OTP');
+        res.render('otpverify', { message: req.flash('danger') });
+    }
 }
 
-module.exports = { getDashboard, getPostdata, getForm, checkLoginData, Otpgen, otpverify }
+const changePass = async(req,res)=>{
+    const hid = req.body.hid
+    const password = req.body.password;
+    const user = await userModel.findOne({email:hid})
+    if(req.body.password){
+        const crypted = await bcrypt.hash(password, saltrounds)
+    user.password = crypted
+    user.otp = ''
+    user.save();
+    res.redirect('/')
+    }
+    else{
+        req.flash('danger', 'Please Enter Password First');
+        res.render('recoverPass', { message: req.flash('danger') });
+    }
+}
+
+
+
+module.exports = { getDashboard, getPostdata, getForm, checkLoginData, Otpgen, otpverify,changePass }
