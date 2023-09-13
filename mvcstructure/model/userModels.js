@@ -10,15 +10,17 @@ const main  = async()=>{
 }
 main();
 const empSchema = new mongoose.Schema({
-    id:Number,
-    name:String,
-    email:{
-        type:String,
-        unique:true
+    id: Number,
+    name: String,
+    email: {
+      type: String,
+      unique: true,
+      index: true, // Add an index to enforce uniqueness
     },
-    password:String,
-    otp:Number
-})
+    password: String,
+    otp: Number,
+  });
+  
 const employee = new mongoose.model('employee', empSchema)
 
 module.exports = employee
