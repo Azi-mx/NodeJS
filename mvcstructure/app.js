@@ -4,6 +4,9 @@ const flash = require('connect-flash')
 const cookie = require('cookie-parser');
 const app = express();
 const http = require('http');
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 const session = require('express-session');
 
 const passport = require('passport')

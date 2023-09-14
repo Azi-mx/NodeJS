@@ -1,4 +1,6 @@
 let userModel = require('../model/userModels')
+let catModel = require('../model/catModel')
+
 let nodemailer = require('nodemailer')
 let bcrypt = require('bcrypt');
 const saltrounds = 10;
@@ -17,15 +19,16 @@ const checkin = async (req, res) => {
     }
 }
 const getDashboard = async (req, res) => {
-    await checkin(req, res)
-    res.render('index', { username: req.cookies.Username })
+    // await checkin(req, res)
+    res.render('index', { username: "AZIM" })
 }
 
 
 //This is to render the form 
 const getForm = async (req, res) => {
-    await checkin(req, res)
-    res.render('form', { username: req.cookies.Username,message:'' })
+    // await checkin(req, res)
+    const getAll = await catModel.find({})
+    res.render('form', { username: 'AZIM',message:'',getAll:getAll })
 }
 
 //This is to register user 

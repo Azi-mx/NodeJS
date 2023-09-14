@@ -21,6 +21,6 @@ const empSchema = new mongoose.Schema({
     otp: Number,
   });
   
-const employee = new mongoose.model('employee', empSchema)
+  const employee = new mongoose.model('employee', empSchema)
 
 module.exports = employee
