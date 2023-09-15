@@ -3,7 +3,7 @@ const passport = require('passport')
 
 const router = new express.Router();
 const { getDashboard, getForm, getPostdata, checkLoginData, Otpgen, otpverify, changePass, } = require('../controller/usercontroll');
-const {savecat} = require('../controller/catcontroller')
+const {savecat,delcat,showcat,editcat} = require('../controller/catcontroller')
 const body = require('body-parser');
 const bodyParser = body.urlencoded({ extended: false })
 
@@ -47,6 +47,8 @@ router.post('/otpverify', bodyParser, otpverify)
 router.post('/changePass', bodyParser, changePass)
 
 router.post('/savecat', bodyParser,savecat)
-
+router.get('/delcat/:id',delcat)
+router.get('/editcat/:id',showcat)
+router.post('/edittcat/:id',bodyParser,editcat)
 
 module.exports = router;

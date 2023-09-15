@@ -28,7 +28,7 @@ const getDashboard = async (req, res) => {
 const getForm = async (req, res) => {
     // await checkin(req, res)
     const getAll = await catModel.find({})
-    res.render('form', { username: 'AZIM',message:'',getAll:getAll })
+    res.render('form', { username: 'AZIM',message:'',getAll:getAll,data:'' });
 }
 
 //This is to register user 

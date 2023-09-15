@@ -27,7 +27,7 @@
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-          <div class="col-md-5">
+          <div class="col-md-12">
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
@@ -35,14 +35,16 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
+              <!-- <% console.log('data:', data); %> 
+              <% console.log('data.name:', data.name); %> -->
               <% if(message){%>
-                <div class="alert danger" role="alert"><%=message%></div>
+                <div class="success" role="alert"><%=message%></div>
                 <%}%>
-              <form action="/savecat" method="post" name="frm">
+              <form action="<% if (data) { %>/edittcat/<%= data._id %><% } else { %>/savecat<% } %>" method="post" name="frm">
                 <div class="card-body">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Category Name</label>
-                    <input type="text" name="catname" class="form-control" id="exampleInputEmail1" placeholder="Enter Category Name">
+                    <input type="text" name="catname" class="form-control" id="exampleInputEmail1" value="<%=(!data)?'':data.name%>" placeholder="Enter Category Name">
                   </div> 
                 </div>
                 <!-- /.card-body -->
@@ -57,7 +59,7 @@
 
           </div>
           <% if(getAll){%>
-          <div class="col-md-7">
+          <div class="col-md-12">
             <table class="table">
               <thead>
                 <tr>
@@ -68,12 +70,12 @@
                 </tr>
               </thead>
               <tbody>
-                <%getaAll.forEach((item)=>{%>
+                <%getAll.forEach((item)=>{%>
                   <tr>
                  
-                    <th scope="row">item._id</th>
+                    <th scope="row"><%=item.id%></th>
                     <td> <%= item.name%></td>
-                    <td>Delete</td>
+                    <td> <a href="/editcat/<%=item._id%>">Edit</a>  <a href="/delcat/<%=item._id%>">Delete</a> </td>
                     
                   </tr>
                 <%})%>
