@@ -4,6 +4,7 @@ const passport = require('passport')
 const router = new express.Router();
 const { getDashboard, getForm, getPostdata, checkLoginData, Otpgen, otpverify, changePass, } = require('../controller/usercontroll');
 const {savecat,delcat,showcat,editcat} = require('../controller/catcontroller')
+const savesubcat = require('../controller/subcatcontroller')
 const body = require('body-parser');
 const bodyParser = body.urlencoded({ extended: false })
 
@@ -50,5 +51,5 @@ router.post('/savecat', bodyParser,savecat)
 router.get('/delcat/:id',delcat)
 router.get('/editcat/:id',showcat)
 router.post('/edittcat/:id',bodyParser,editcat)
-
+router.post('savesubcat',bodyParser,savesubcat)
 module.exports = router;

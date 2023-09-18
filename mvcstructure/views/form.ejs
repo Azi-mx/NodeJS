@@ -37,9 +37,7 @@
               <!-- form start -->
               <!-- <% console.log('data:', data); %> 
               <% console.log('data.name:', data.name); %> -->
-              <% if(message){%>
-                <div class="success" role="alert"><%=message%></div>
-                <%}%>
+              
               <form action="<% if (data) { %>/edittcat/<%= data._id %><% } else { %>/savecat<% } %>" method="post" name="frm">
                 <div class="card-body">
                   <div class="form-group">
@@ -48,7 +46,9 @@
                   </div> 
                 </div>
                 <!-- /.card-body -->
-
+                <% if(message){%>
+                  <div class="card-header bg-danger" role="alert"><%=message%></div>
+                  <%}%>
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Add</button>
                 </div>
@@ -75,7 +75,7 @@
                  
                     <th scope="row"><%=item.id%></th>
                     <td> <%= item.name%></td>
-                    <td> <a href="/editcat/<%=item._id%>">Edit</a>  <a href="/delcat/<%=item._id%>">Delete</a> </td>
+                    <td> <a href="/editcat/<%=item._id%>" class="bg-primary p-2" style="--bs-bg-opacity: .5;">Edit</a>  <a href="/delcat/<%=item._id%>" class="bg-danger p-2" style="--bs-bg-opacity: .5;">Delete</a> </td>
                     
                   </tr>
                 <%})%>
