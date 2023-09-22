@@ -58,17 +58,17 @@ const localization = (passport) => {
     new LocalStrategy(async (username, password, done) => {
       console.log(username + " " + password)
       let userdata = await User.findOne({ name: username });
-      console.log(userdata)
+      console.log(userdata.password)
       try {
-        if (!userdata) return done(null, false);
-        if (!bcrypt.compare(password, userdata.password)) {
-          console.log("bcryot blocked");
+        // if (!userdata) return done(null, false);
+        if (bcrypt.compare(password, userdata.password)) {
+          console.log("bcrypt block");
           // If the passwords don't match, return 'false' to indicate failed authentication
           // Also, include a message that will be available to handle authentication failure on the client side
-          return done(null, false, { message: 'Incorrect email or password' });
+          return done(null, userdata);
         }
         // if (userdata.password !== password) return done(null, false);
-         return done(null, userdata);
+         else return done(null, false, { message: 'Incorrect email or password' });
       } catch (error) {
         console.log("catch blocked");
         return done(error, false);

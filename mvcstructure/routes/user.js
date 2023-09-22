@@ -22,9 +22,7 @@ router.get('/admin/form', getForm)
 router.post('/admin/savedata', bodyParser, getPostdata)
 // router.post('/checkLogin',bodyParser,checkUserData)
 // router.post('/checkLogin',bodyParser,checkLoginData)
-// router.post('/checkLogin', passport.authenticate('local', {
-//     successRedirect: '/admin/data',
-// }));
+
 router.post(
   "/checkLogin",
   passport.authenticate("local", {
