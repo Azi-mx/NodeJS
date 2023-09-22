@@ -13,6 +13,16 @@ const savesubcat = async(req,res)=>{
         name:name,
         cat_id: id
     }
+    const savedata = new subcatmodel(result);
+    await savedata.save()
+    let getdata = await subcatmodel.find()
+    res.json(getdata)
+}
+const getsubdata = async(req,res)=>{
+    subcatmodel.find()
+    .populate("cat_id")
+    .then(p=>console.log(p))
+    .catch(error=>console.log(error));
 }
 
-module.exports = savesubcat;
+module.exports = {savesubcat,getsubdata};
