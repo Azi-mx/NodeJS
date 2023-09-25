@@ -38,7 +38,7 @@ const savecat = async (req, res) => {
 
 const delcat = async (req, res) => {
     let id = req.params.id
-    let data = await catModel.findByIdAndRemove({ _id: id })
+    await catModel.findByIdAndRemove({ _id: id })
     console.log("Data Removed");
     const getAll = await catModel.find({});
     res.render('form', { username: 'AZIM', getAll: getAll, message: 'Category Deleted', data: '' });
@@ -52,7 +52,6 @@ const showcat = async (req, res) => {
         // let name = data.name;
         const getAll = await catModel.find({});
 
-        // console.log(data);
         // res.redirect('/admin/form?data=' + JSON.stringify(data));
 
         res.render('form', { username: 'AZIM', getAll: getAll, message: '', data: data });

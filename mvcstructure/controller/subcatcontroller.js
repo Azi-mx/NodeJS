@@ -8,21 +8,23 @@ app.use(express.json());
 const savesubcat = async(req,res)=>{
     const name = req.body.name;
     const id = req.body.cat_id;
-
+console.log(name,id);
     const result = {
         name:name,
         cat_id: id
     }
     const savedata = new subcatmodel(result);
     await savedata.save()
-    let getdata = await subcatmodel.find()
-    res.json(getdata)
+    res.redirect('/admin/subcatform')
 }
-const getsubdata = async(req,res)=>{
-    subcatmodel.find()
-    .populate("cat_id")
-    .then(p=>console.log(p))
-    .catch(error=>console.log(error));
+// const getsubdata = async(req,res)=>{
+//     subcatmodel.find()
+//     .populate("cat_id")
+    
+// }
+const getsubcatform = async (req,res)=>{
+    const getAll = await subcatmodel.find().populate("cat_id")
+    const cat = await catModel.find()
+    res.render('subcatform',{ username: 'AZIM', getAll: getAll,cat:cat, message: '', data: '' })
 }
-
-module.exports = {savesubcat,getsubdata};
+module.exports = {savesubcat,getsubcatform};
