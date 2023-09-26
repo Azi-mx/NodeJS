@@ -13,11 +13,11 @@ const savesubcat = async (req, res) => {
   
       console.log('Received cat_id:', id); // Add this line for debugging
   
-      // Validate the cat_id before proceeding
-    //   if (!mongoose.Types.ObjectId.isValid(id)) {
-    //     // Handle the case where id (cat_id) is not a valid ObjectId
-    //     return res.status(400).json({ error: 'Invalid cat_id' });
-    //   }
+    //   Validate the cat_id before proceeding
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        // Handle the case where id (cat_id) is not a valid ObjectId
+        return res.status(400).json({ error: 'Invalid cat_id' });
+      }
   
       const result = {
         name: name,
