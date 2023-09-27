@@ -65,11 +65,23 @@ const editsubcat = async (req, res) => {
 
 }
 const updatesubcat = async (req, res) => {
-    let id = req.params.id;
-    let name = req.body.name;
-    await subcatmodel.findByIdAndUpdate({ _id: id }, { $set: { name: name } })
-    res.redirect('/admin/subcatform')
-}
+  try {
+      const id = req.params.id;
+      const name = req.body.name;
+      const cat_id = req.body.cat_id;
+
+      // Create a single object for the update operation
+      const updateData = { name: name, cat_id: cat_id };
+
+      await subcatmodel.findByIdAndUpdate({ _id: id }, { $set: updateData });
+
+      res.redirect('/admin/subcatform');
+  } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'An error occurred while updating the subcategory.' });
+  }
+};
+
 const delsubcat = async (req, res) => {
     let id = req.params.id
     await subcatmodel.findByIdAndRemove({ _id: id })
@@ -78,18 +90,23 @@ const delsubcat = async (req, res) => {
 
     // res.redirect('/admin/form')
 }
-const getCatData = async(req,res) => {
-    let cat_id = req.query.selectedValue;
-    let subData;
-    if(cat_id != '') {
-        subData =  await subcatmodel.find({cat_id:cat_id}).populate("cat_id");
-    }
-    else {
-        subData =  await subcatmodel.find().populate("cat_id");
-    }
+const getData = async (req, res) => {
+  try {
+      let cat_id = req.query.selectedValue;
+      console.log(cat_id);
+      let subData;
 
-        res.json(subData);
-    
+      if (cat_id !== '') {
+          subData = await subcatmodel.find({ cat_id: cat_id }).populate("cat_id");
+      } else {
+          subData = await subcatmodel.find().populate("cat_id");
+      }
 
-}
-module.exports = { savesubcat, getsubcatform,editsubcat,updatesubcat,delsubcat };
+      res.json(subData);
+  } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'An error occurred while fetching data.' });
+  }
+};
+
+module.exports = { savesubcat, getsubcatform,editsubcat,updatesubcat,delsubcat,getData };
