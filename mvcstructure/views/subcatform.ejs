@@ -26,8 +26,7 @@
           <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div class="row">
-              <div
-                class="col-md-6">
+              <div class="col-md-6">
                 <!-- general form elements -->
                 <div class="card card-primary">
                   <div class="card-header">
@@ -45,11 +44,11 @@
                         <select name="cat_id">
                           <option value="">Select Category</option>
                           <% cat.forEach((i)=>{%>
-                            <%var selected = (data && i._id.toString() == data.cat_id.toString())?'selected':''%>
-                            <option value="<%= i._id %>" <%= selected %>>
-                              <%=i.name%>
-                            </option>
-                            <%})%>
+                            <%var selected=(data && i._id.toString()==data.cat_id.toString())?'selected':''%>
+                              <option value="<%= i._id %>" <%= selected %>>
+                                <%=i.name%>
+                              </option>
+                              <%})%>
 
                         </select>
 
@@ -77,50 +76,59 @@
               </div>
               <% if(getAll){%>
                 <div class="col-md-6">
-                  <label for="exampleInputEmail1">Filter With Category</label>
-                  <select id="dropdown" name="table">
-                    <option value="">Select Category</option>
-                    <% cat.forEach((i)=>{%>
-                      <!-- var selected = (data && i._id.toString() == data.)?'selected':'' -->
-                      <option value="<%= i._id %>">
-                        <%=i.name%>
-                      </option>
-                      <%})%>
+                  <div class="card card-primary">
 
-                  </select>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Category Name</th>
-                        <th scope="col">Subcategory Name</th>
-                        <th scope="col">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody class="table">
-                      <!-- getAll is for subcategory -->
-                      <%getAll.forEach((item,id)=>{%>
+                    <table class="table-dark ">
+                      <div class="card-header row">
+                        <div class="col-md-6">
+                          <label for="exampleInputEmail1">Filter With Category</label>
+                          <select id="dropdown" name="table">
+                            <option id="dropdownMenuButton" class="btn btn-secondary dropdown dropdown-toggle" value="">Select Category</option>
+                            <% cat.forEach((i)=>{%>
+                              <!-- var selected = (data && i._id.toString() == data.)?'selected':'' -->
+                              <option value="<%= i._id %>">
+                                <%=i.name%>
+                              </option>
+                              <%})%>
+                          </select>
+                        </div>
+                        <div class="col-md-6">
+                          <input class="form-control form-control-navbar" type="search" placeholder="Search" id="search" aria-label="Search">
+                        </div>
+                      </div>
+                      <thead>
                         <tr>
-
-                          <th scope="row">
-                            <%=id+1%>
-                          </th>
-                          <td>
-                            <%= item.cat_id.name%>
-                          </td>
-                          <td>
-                            <%= item.name%>
-                          </td>
-                          <td> <a href="/showsubcat/<%=item._id%>" class="bg-primary p-2"
-                              style="--bs-bg-opacity: .5;">Edit</a> <a href="/deletesubcat/<%=item._id%>"
-                              class="bg-danger p-2" style="--bs-bg-opacity: .5;">Delete</a> </td>
-
+                          <th scope="col">#</th>
+                          <th scope="col">Category</th>
+                          <th scope="col">Subcategory</th>
+                          <th scope="col">Action</th>
                         </tr>
-                        <%})%>
+                      </thead>
+                      <tbody class="table">
+                        <!-- getAll is for subcategory -->
+                        <%getAll.forEach((item,id)=>{%>
+                          <tr>
 
-                    </tbody>
-                  </table>
-                  <%}%>
+                            <th scope="row">
+                              <%=id+1%>
+                            </th>
+                            <td>
+                              <%= item.cat_id.name%>
+                            </td>
+                            <td>
+                              <%= item.name%>
+                            </td>
+                            <td> <a href="/showsubcat/<%=item._id%>" class="bg-primary p-2"
+                                style="--bs-bg-opacity: .5;">Edit</a> <a href="/deletesubcat/<%=item._id%>"
+                                class="bg-danger p-2" style="--bs-bg-opacity: .5;">Delete</a> </td>
+
+                          </tr>
+                          <%})%>
+
+                      </tbody>
+                    </table>
+                    <%}%>
+                  </div>
                 </div>
             </div>
           </div>
@@ -130,4 +138,4 @@
         <!-- /.content -->
       </div>
       <%- include('./Partials/footer') %>
-      <script src="../script.js"></script>
+        <script src="../script.js"></script>

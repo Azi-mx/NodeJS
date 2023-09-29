@@ -93,7 +93,7 @@ const delsubcat = async (req, res) => {
 const getData = async (req, res) => {
   try {
       let cat_id = req.query.selectedValue;
-      console.log(cat_id);
+      // console.log(cat_id);
       let subData;
 
       if (cat_id !== '') {
@@ -109,4 +109,28 @@ const getData = async (req, res) => {
   }
 };
 
-module.exports = { savesubcat, getsubcatform,editsubcat,updatesubcat,delsubcat,getData };
+const getFilteredData = async (req, res) => {
+  try {
+      let searchtext = req.query.selectedValue;
+      // console.log(cat_id);
+      let subData;
+
+      let categories = await catModel.find({
+        name:{$regex:new RegExp(searchtext,"i")}
+      })
+
+      let id = categories.map(category=>category._id)
+      subData = await subcatmodel.find({
+        cat_id:{$in:id}
+      }).populate("cat_id")
+      if(subData == ''){
+        subData = await subcatmodel.find({name:{$regex:new RegExp(searchtext,"i")}}).populate("cat_id")
+      }
+      res.json(subData);
+  } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'An error occurred while fetching data.' });
+  }
+};
+
+module.exports = { savesubcat, getsubcatform,editsubcat,updatesubcat,delsubcat,getData,getFilteredData };
