@@ -20,16 +20,31 @@ export default function () {
        
         console.log(name,price,category,company);
         let userid = JSON.parse(localStorage.getItem('user'))._id;
+        
         // console.log(userid)
-        let result = await fetch('http://localhost:8000/add-product',{
-            method:'post',
+        const authToken = JSON.parse(localStorage.getItem('token')); // Assuming your authentication token is stored in localStorage
+
+let result = await fetch('http://localhost:8000/add-product', {
+    method: 'post',
+    body: JSON.stringify({ name, price, category, company, userid, authToken }),
+    headers: {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${authToken}` // Include the authentication token in the headers
+    }
+});
+
+result = await result.json();
+
+        //
+        // let result = await fetch('http://localhost:8000/add-product',{
+        //     method:'post',
           
-            body:JSON.stringify({name,price,category,company,userid}),
-            headers:{
-                'Content-type':'application/json'
-              }
-        })
-        result = await result.json();
+        //     body:JSON.stringify({name,price,category,company,userid,auth}),
+        //     headers:{
+        //         'Content-type':'application/json'
+        //       }
+        // })
+        // result = await result.json();
         console.log(result);
         if(result){
             navigate('/')

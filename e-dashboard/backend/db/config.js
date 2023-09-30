@@ -1,3 +1,3 @@
 const mongoose = require('mongoose')
-    mongoose.connect('mongodb+srv://azim_memon:afraz123@clusters.l7snngf.mongodb.net/?retryWrites=true&w=majority',{useNewUrlParser:true})
+    mongoose.connect('mongodb://127.0.0.1:27017/e-comm',{useNewUrlParser:true})
     

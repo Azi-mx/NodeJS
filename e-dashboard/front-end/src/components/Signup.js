@@ -20,13 +20,18 @@ export default function Signup() {
 
     const collectData = async ()=>{
         console.warn(name,email,password)
+        const res = {
+          name:name,
+          email:email,
+          password:password
+        }
         //Here api is integrated using fetch method and the data will only fetch when localhost is running on local
         let result = await fetch('http://localhost:8000/register',
         {
           method:'post',
           //We are using json.stringify just because we are send data so data should be in Json format
           //The data we got by using use state will be now sent to database for registration
-          body:JSON.stringify({name,email,password}),
+          body:JSON.stringify(res),
           headers:{
             'Content-type':'application/json'
           }

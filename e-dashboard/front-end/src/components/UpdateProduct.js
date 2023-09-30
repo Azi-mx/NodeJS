@@ -16,7 +16,10 @@ export default function () {
     },[])
 
     const getProductDetails = async ()=>{
-        let result = await fetch(`http://localhost:8000/product/${params.id}`)
+        let result = await fetch(`http://localhost:8000/product/${params.id}`,{
+        headers: {
+            authorization:`bearer ${JSON.parse(localStorage.getItem('token'))}`
+        }})
         result = await result.json();
         setName(result.name);
         setPrice(result.price);
@@ -31,7 +34,9 @@ export default function () {
             method:"Put",
             body:JSON.stringify({name,price,category,company}),
             headers:{
-                'Content-type':'application/json'
+                'Content-type':'application/json',
+                authorization:`bearer ${JSON.parse(localStorage.getItem('token'))}`
+
               }
         })
         //It return a promise so we use await 

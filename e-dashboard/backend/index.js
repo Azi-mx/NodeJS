@@ -5,7 +5,9 @@ require('./db/config'); // Import database configuration
 const User = require('./db/User'); // Import the User model
 const cors = require('cors'); // Import CORS for cross-origin support
 const Jwt = require('jsonwebtoken'); // Import the JWT library for token handling
-const jwtkey = 'e-comm'; // JWT secret key
+const jwtkey = 'ecomm'; // JWT secret key
+const body = require('body-parser');
+const bodyParser = body.urlencoded({ extended: false })
 
 // Import the Product model
 const Product = require('./db/Product');
@@ -16,21 +18,25 @@ app.use(cors()); // Enable CORS for the app
 app.use(express.json());
 
 // API endpoint to register a new user
-app.post('/register', async (req, res) => {
+app.post('/register', bodyParser, async (req, res) => {
     try {
+        console.log(req.body);
         let user = new User(req.body); // Create a new User object based on request body
         let Createuser = await user.save(); // Save the user object in the database
         Createuser = Createuser.toObject();
-
+        // console.log("Created User....");
+        // console.log(Createuser);
         // Remove sensitive data (like password) before sending the response
         delete Createuser.password;
 
         if (Createuser) {
             // Generate a JWT token containing user data
-            Jwt.sign({ Createuser }, jwtkey, { expiresIn: "2h" }, (err, token) => {
+            Jwt.sign({ Createuser }, jwtkey, (err, token) => {
                 if (err) {
                     res.send({ Createuser: "something went wrong" });
                 }
+                console.log(token);
+
                 // Respond with user data and token
                 res.send({ Createuser, auth: token });
             });
@@ -41,7 +47,7 @@ app.post('/register', async (req, res) => {
 });
 
 // API endpoint for user login
-app.post('/login',async (req, res) => {
+app.post('/login', async (req, res) => {
     if (req.body.password && req.body.email) {
         // Find user based on provided email and exclude password from result
         let user = await User.findOne(req.body).select('-password');
@@ -62,7 +68,7 @@ app.post('/login',async (req, res) => {
 });
 
 // API endpoint to fetch the list of products
-app.get('/products', verifyToken,async (req, res) => {
+app.get('/products', verifyToken, async (req, res) => {
     let products = await Product.find(); // Retrieve all products from the database
     if (products.length > 0) {
         res.send(products); // Respond with the list of products
@@ -72,14 +78,14 @@ app.get('/products', verifyToken,async (req, res) => {
 });
 
 // API endpoint to add a new product
-app.post('/add-product', verifyToken,async (req, res) => {
+app.post('/add-product', verifyToken, async (req, res) => {
     let product = new Product(req.body); // Create a new Product object
     let result = await product.save(); // Save the product object in the database
     res.send(result); // Respond with the saved product data
 });
 
 // API endpoint to delete a product by ID
-app.delete('/product/:id', verifyToken,async (req, res) => {
+app.delete('/product/:id', verifyToken, async (req, res) => {
     let id = req.params.id; // Extract the product ID from the request parameters
     let result = await Product.deleteOne({ _id: id }); // Delete the product with the given ID
     res.send(result); // Respond with the deletion result
@@ -102,7 +108,7 @@ app.get('/product/:id', verifyToken, async (req, res) => {
 });
 
 // API endpoint to update a product by ID
-app.put('/product/:id', verifyToken,async (req, res) => {
+app.put('/product/:id', verifyToken, async (req, res) => {
     let result = await Product.updateOne(
         { _id: req.params.id }, // Find the product by ID
         { $set: req.body } // Update the product with the provided data
@@ -125,22 +131,36 @@ app.get('/search/:key', verifyToken, async (req, res) => {
 });
 
 // Middleware function to verify JWT token
-function verifyToken(req, res, next) {
-    let token = req.headers['authorization']; // Get the JWT token from the request header
-    if(token){
-        token = token.split(' ')[1]
-        Jwt.verify(token,jwtkey,(err,valid)=>{
-            if(err){
-                res.status(401).send({result:"Please provide valid token"})
-            }else{
-                next(); // Proceed to the next middleware or route handler
+async function verifyToken(req, res, next) {
+    // console.log(req.headers);
+    // let token = req.headers['authorization']; // Get the JWT token from the request header
+    const token = req.headers.authorization.split(' ')[1];
+    if (token) {
+        
+
+        // token = token.split(' ')[1]
+        // console.log(token);
+        Jwt.verify(token, jwtkey, (err, decoded) => {
+            if (err || !decoded) {
+                console.log('Error:', err);
+                res.status(401).send({ result: "Token is invalid" });
+            } else {
+                // Check the 'exp' claim of the decoded token here
+                if (decoded.exp < Date.now() / 1000) {
+                    res.status(401).send({ result: "Token has expired" });
+                } else {
+                    next(); // Proceed to the next middleware or route handler
+                }
             }
-        })
+        });
+        
+
+
     }
-    else{
-        res.send({result:"Please add token with header"})
+    else {
+        res.send({ result: "Please add token with header" })
     }
-    console.log('middleware called', token); // Log token for verification
+    // console.log('middleware called', token); // Log token for verification
 }
 
 // Start the server on port 8000

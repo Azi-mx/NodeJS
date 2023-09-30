@@ -28,7 +28,11 @@ function ProductList() {
     const deleteProduct = async (id) => {
         // Send a DELETE request to delete the product by ID
         let result = await fetch(`http://localhost:8000/product/${id}`, {
-            method: 'Delete'
+            method: 'Delete',
+            headers: {
+                authorization:`bearer ${JSON.parse(localStorage.getItem('token'))}`
+            }
+
         });
 
         // Parse the response as JSON
