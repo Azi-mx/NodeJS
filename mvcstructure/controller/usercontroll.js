@@ -43,7 +43,7 @@ const getPostdata = async (req, res) => {
         }
         else {
             const mailData = {
-                from: 'bagsariyaan@gmail.com',
+                from: 'bagsariyaa@gmail.com',
                 to: email,
                 subject: 'Testing the nodemailer',
                 text: "The email is succesfully recieved",

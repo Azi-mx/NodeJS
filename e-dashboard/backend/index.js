@@ -117,7 +117,7 @@ app.put('/product/:id', verifyToken, async (req, res) => {
 });
 
 // API endpoint to search for products using a keyword
-app.get('/search/:key', verifyToken, async (req, res) => {
+app.get('/search/:key', async (req, res) => {
     // Search for products based on various fields using regular expressions
     let result = await Product.find({
         "$or": [
