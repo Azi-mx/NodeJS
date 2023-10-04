@@ -1,5 +1,5 @@
 const catModel = require('../model/catModel'); // Make sure you require your model
-
+const subcatModel = require('../model/subcatModel');
 // Category Save
 
 const savecat = async (req, res) => {
@@ -38,10 +38,20 @@ const savecat = async (req, res) => {
 
 const delcat = async (req, res) => {
     let id = req.params.id
-    await catModel.findByIdAndRemove({ _id: id })
-    console.log("Data Removed");
-    const getAll = await catModel.find({});
-    res.render('form', { username: 'AZIM', getAll: getAll, message: 'Category Deleted', data: '' });
+    const subcat = await subcatModel.find({ cat_id: id });
+    if (subcat.length > 0) {
+        const getAll = await catModel.find({});
+        res.render('form', { username: 'AZIM', getAll: getAll, message: 'Please Delete all the Subcategory First', data: '' });
+
+    } else {
+        const data = await catModel.findByIdAndRemove({ _id: id });
+        if (data) {
+            console.log("Data Removed");
+            const getAll = await catModel.find({});
+            res.render('form', { username: 'AZIM', getAll: getAll, message: 'Category Deleted', data: '' });
+        }
+    }
+
 
     // res.redirect('/admin/form')
 }

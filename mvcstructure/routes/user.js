@@ -5,6 +5,7 @@ const router = new express.Router();
 const { getDashboard, getForm, getPostdata, checkLoginData, Otpgen, otpverify, changePass, } = require('../controller/usercontroll');
 const {savecat,delcat,showcat,editcat} = require('../controller/catcontroller')
 const {savesubcat,getsubcatform,editsubcat,updatesubcat,delsubcat,getData,getFilteredData} = require('../controller/subcatcontroller')
+const getproduct = require('../controller/productcontroller')
 const body = require('body-parser');
 const bodyParser = body.urlencoded({ extended: false })
 
@@ -59,4 +60,7 @@ router.post('/updatesubcat/:id',updatesubcat)
 router.get('/deletesubcat/:id',delsubcat)
 router.get('/getData',getData)
 router.get('/getFilteredData',getFilteredData)
+
+//Products:
+router.get('/admin/productform',getproduct)
 module.exports = router;
