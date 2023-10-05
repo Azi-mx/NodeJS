@@ -13,7 +13,7 @@ function ProductList() {
     // Function to fetch the list of products from the server
     const getProducts = async () => {
         // Send a GET request to fetch products, including the authorization token
-        let result = await fetch('http://localhost:8000/products', {
+        let result = await fetch('https://e-dashborad.onrender.com/products', {
             headers: {
                 authorization:`bearer ${JSON.parse(localStorage.getItem('token'))}`
             }
@@ -27,7 +27,7 @@ function ProductList() {
     // Function to delete a product by its ID
     const deleteProduct = async (id) => {
         // Send a DELETE request to delete the product by ID
-        let result = await fetch(`http://localhost:8000/product/${id}`, {
+        let result = await fetch(`https://e-dashborad.onrender.com/product/${id}`, {
             method: 'Delete',
             headers: {
                 authorization:`bearer ${JSON.parse(localStorage.getItem('token'))}`
@@ -50,7 +50,7 @@ function ProductList() {
 
         if (key) {
             // Send a GET request to search for products using the provided key
-            let result = await fetch(`http://localhost:8000/search/${key}`);
+            let result = await fetch(`https://e-dashborad.onrender.com/search/${key}`);
             result = await result.json();
 
             if (result) {

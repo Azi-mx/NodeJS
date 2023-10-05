@@ -26,7 +26,7 @@ export default function Signup() {
           password:password
         }
         //Here api is integrated using fetch method and the data will only fetch when localhost is running on local
-        let result = await fetch('http://localhost:8000/register',
+        let result = await fetch('https://e-dashborad.onrender.com/register',
         {
           method:'post',
           //We are using json.stringify just because we are send data so data should be in Json format

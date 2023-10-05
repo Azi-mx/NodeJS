@@ -4,8 +4,9 @@ const app = express(); // Initialize the Express app
 require('./db/config'); // Import database configuration
 const User = require('./db/User'); // Import the User model
 const cors = require('cors'); // Import CORS for cross-origin support
+require('dotenv').config();
 const Jwt = require('jsonwebtoken'); // Import the JWT library for token handling
-const jwtkey = 'ecomm'; // JWT secret key
+const jwtkey = process.env.JWT_KEY; // JWT secret key
 const body = require('body-parser');
 const bodyParser = body.urlencoded({ extended: false })
 
@@ -16,6 +17,8 @@ app.use(cors()); // Enable CORS for the app
 
 // Middleware to parse incoming JSON data in requests
 app.use(express.json());
+
+const PORT = process.env.PORT || 8000
 
 // API endpoint to register a new user
 app.post('/register', bodyParser, async (req, res) => {
@@ -134,7 +137,7 @@ app.get('/search/:key', async (req, res) => {
 async function verifyToken(req, res, next) {
     // console.log(req.headers);
     // let token = req.headers['authorization']; // Get the JWT token from the request header
-    const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization.split('')[1];
     if (token) {
         
 
@@ -164,6 +167,6 @@ async function verifyToken(req, res, next) {
 }
 
 // Start the server on port 8000
-app.listen(8000, () => {
+app.listen(PORT, () => {
     console.log("connected");
 });
