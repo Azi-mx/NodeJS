@@ -2,6 +2,9 @@ let userModel = require('../model/userModels')
 let catModel = require('../model/catModel')
 
 let nodemailer = require('nodemailer')
+const secretKey = 'Afraz143';
+var jwt = require('jsonwebtoken');
+
 let bcrypt = require('bcrypt');
 const saltrounds = 10;
 const transporter = nodemailer.createTransport({
@@ -64,7 +67,9 @@ const getPostdata = async (req, res) => {
             console.log(res1);
             // res.send(res1)
             req.flash('info', 'You Have been registered Succesfully')
-            
+            var token = jwt.sign({result:result},secretKey);
+            let _id = data._id;
+            result = await model.findByIdAndUpdate({_id},{$set:{token:token}})
             res.render('login',{ message: req.flash('info') })
         }
     }
