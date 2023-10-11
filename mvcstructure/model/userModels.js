@@ -19,6 +19,7 @@ const empSchema = new mongoose.Schema({
     },
     password: String,
     otp: Number,
+    token: String
   });
   
   const employee = new mongoose.model('employee', empSchema)
