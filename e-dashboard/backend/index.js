@@ -17,11 +17,11 @@ app.use(cors()); // Enable CORS for the app
 
 // Middleware to parse incoming JSON data in requests
 app.use(express.json());
-
+app.use(body.json());
 const PORT = process.env.PORT || 8000
 
 // API endpoint to register a new user
-app.post('/register', bodyParser, async (req, res) => {
+app.post('/register', async (req, res) => {
     try {
         console.log(req.body);
         let user = new User(req.body); // Create a new User object based on request body
@@ -71,7 +71,7 @@ app.post('/login', async (req, res) => {
 });
 
 // API endpoint to fetch the list of products
-app.get('/products', verifyToken, async (req, res) => {
+app.get('/products',verifyToken, async (req, res) => {
     let products = await Product.find(); // Retrieve all products from the database
     if (products.length > 0) {
         res.send(products); // Respond with the list of products
@@ -137,7 +137,7 @@ app.get('/search/:key', async (req, res) => {
 async function verifyToken(req, res, next) {
     // console.log(req.headers);
     // let token = req.headers['authorization']; // Get the JWT token from the request header
-    const token = req.headers.authorization.split('')[1];
+    const token = req.headers.authorization.split(' ')[1];
     if (token) {
         
 

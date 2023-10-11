@@ -2,6 +2,7 @@ const model = require('../model/productModel')
 const catModel = require('../model/catModel');
 const subcatmodel = require('../model/subcatModel');
 
+
 const getproduct = async(req,res)=>{
         try {
             const getAll = await subcatmodel.find().populate('cat_id');
