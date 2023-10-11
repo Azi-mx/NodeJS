@@ -19,7 +19,8 @@ const empSchema = new mongoose.Schema({
     },
     password: String,
     otp: Number,
-    token: String
+    token: String,
+    role_id:{ type: mongoose.Schema.Types.ObjectId, ref: 'roleModel' }
   });
   
   const employee = new mongoose.model('employee', empSchema)

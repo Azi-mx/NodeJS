@@ -23,7 +23,7 @@ const checkin = async (req, res) => {
 }
 const getDashboard = async (req, res) => {
     // await checkin(req, res)
-    res.render('index', { username: "AZIM" })
+    res.render('index', { username: req.cookies.Username })
 }
 
 
@@ -31,7 +31,7 @@ const getDashboard = async (req, res) => {
 const getForm = async (req, res) => {
     // await checkin(req, res)
     const getAll = await catModel.find({})
-    res.render('form', { username: 'AZIM',message:'',getAll:getAll,data:'' });
+    res.render('form', { username: req.cookies.Username,message:'',getAll:getAll,data:'' });
 }
 
 //This is to register user 

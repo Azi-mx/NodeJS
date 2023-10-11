@@ -6,6 +6,8 @@ const { getDashboard, getForm, getPostdata, checkLoginData, Otpgen, otpverify, c
 const {savecat,delcat,showcat,editcat} = require('../controller/catcontroller')
 const {savesubcat,getsubcatform,editsubcat,updatesubcat,delsubcat,getData,getFilteredData} = require('../controller/subcatcontroller')
 const {getproduct,saveproduct} = require('../controller/productcontroller')
+
+const {roleData,saverole,deleteRoleData,editRoleData} = require('../controller/rolecontroller')
 const body = require('body-parser');
 const verifyToken = require('../jwtconfig');
 const bodyParser = body.urlencoded({ extended: false })
@@ -19,8 +21,8 @@ router.get('/forgotpass', (req, res) => {
 //Here we are generating the otp and sending it through nodemailer
 router.post('/otp', bodyParser, Otpgen)
 
-router.get('/admin/data',verifyToken, getDashboard)
-router.get('/admin/form',verifyToken, getForm)
+router.get('/admin/data', getDashboard)
+router.get('/admin/form', getForm)
 router.post('/admin/savedata', bodyParser, getPostdata)
 // router.post('/checkLogin',bodyParser,checkUserData)
 // router.post('/checkLogin',bodyParser,checkLoginData)
@@ -67,5 +69,11 @@ router.get('/admin/productform',getproduct)
 router.post('/admin/productform',saveproduct)
 
 //roles:
+router.get('/admin/roleForm',roleData)
+router.post('/admin/roleForm',saverole)
+router.get('/admin/delrole/:id',deleteRoleData)
+router.get('/admin/editrole/:id',editRoleData)
+
+
 
 module.exports = router;
