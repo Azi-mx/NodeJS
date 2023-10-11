@@ -7,7 +7,7 @@ const savecat = async (req, res) => {
     getAll = await catModel.findOne({ name: category });
     if (getAll) {
         getAll = await catModel.find({});
-        res.render('form', { username: 'AZIM', getAll: getAll, message: 'Category Already Existed Please Enter New Category', data: '' });
+        res.render('form', { username: req.cookies.Username, getAll: getAll, message: 'Category Already Existed Please Enter New Category', data: '' });
     }
     else {
         try {
@@ -25,7 +25,7 @@ const savecat = async (req, res) => {
             console.log(getAll);
 
             // Render the 'form' template and pass 'getAll' data to it
-            res.render('form', { username: 'AZIM', getAll: getAll, message: 'Category Added Succesfully', data: '' });
+            res.render('form', { username: req.cookies.Username, getAll: getAll, message: 'Category Added Succesfully', data: '' });
             // res.redirect('/admin/form?getAll=' + JSON.stringify(getAll));
 
         } catch (error) {
@@ -41,14 +41,14 @@ const delcat = async (req, res) => {
     const subcat = await subcatModel.find({ cat_id: id });
     if (subcat.length > 0) {
         const getAll = await catModel.find({});
-        res.render('form', { username: 'AZIM', getAll: getAll, message: 'Please Delete all the Subcategory First', data: '' });
+        res.render('form', { username: req.cookies.Username, getAll: getAll, message: 'Please Delete all the Subcategory First', data: '' });
 
     } else {
         const data = await catModel.findByIdAndRemove({ _id: id });
         if (data) {
             console.log("Data Removed");
             const getAll = await catModel.find({});
-            res.render('form', { username: 'AZIM', getAll: getAll, message: 'Category Deleted', data: '' });
+            res.render('form', { username: req.cookies.Username, getAll: getAll, message: 'Category Deleted', data: '' });
         }
     }
 
@@ -64,7 +64,7 @@ const showcat = async (req, res) => {
 
         // res.redirect('/admin/form?data=' + JSON.stringify(data));
 
-        res.render('form', { username: 'AZIM', getAll: getAll, message: '', data: data });
+        res.render('form', { username: req.cookies.Username, getAll: getAll, message: '', data: data });
     }
     catch (error) {
         // Handle errors here

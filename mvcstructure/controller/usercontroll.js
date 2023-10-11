@@ -55,11 +55,12 @@ const getPostdata = async (req, res) => {
             const crypted = await bcrypt.hash(password, saltrounds)
             let user = await userModel.find()
             let len = user.length;
-            const result = await userModel({
+            let result = await userModel({
                 id: len+1,
                 name: req.body.username,
                 email: req.body.email,
-                password: crypted
+                password: crypted,
+                token:''
             })
             await transporter.sendMail(mailData);
             const res1 = await result.save();
@@ -68,8 +69,8 @@ const getPostdata = async (req, res) => {
             // res.send(res1)
             req.flash('info', 'You Have been registered Succesfully')
             var token = jwt.sign({result:result},secretKey);
-            let _id = data._id;
-            result = await model.findByIdAndUpdate({_id},{$set:{token:token}})
+            let _id = result._id;
+            result = await userModel.findByIdAndUpdate({_id},{$set:{token:token}})
             res.render('login',{ message: req.flash('info') })
         }
     }
@@ -115,6 +116,7 @@ const checkLoginData = async (req, res) => {
             else {
                 res.cookie('Username', user.name);
                 res.render('index',{ username: req.cookies.Username})
+                localStorage.setItem('userToken', JSON.stringify(user.token));
             }
         }
     }
