@@ -2,12 +2,12 @@ const express = require('express');
 const passport = require('passport')
 
 const router = new express.Router();
-const { getDashboard, getForm, getPostdata, checkLoginData, Otpgen, otpverify, changePass, } = require('../controller/usercontroll');
+const { getDashboard, getForm, getPostdata, checkLoginData, Otpgen, otpverify, changePass, registerForm} = require('../controller/usercontroll');
 const {savecat,delcat,showcat,editcat} = require('../controller/catcontroller')
 const {savesubcat,getsubcatform,editsubcat,updatesubcat,delsubcat,getData,getFilteredData} = require('../controller/subcatcontroller')
 const {getproduct,saveproduct} = require('../controller/productcontroller')
 
-const {roleData,saverole,deleteRoleData,editRoleData} = require('../controller/rolecontroller')
+const {roleData,saverole,deleteRoleData,editRoleData,updaterole,checkRole} = require('../controller/rolecontroller')
 const body = require('body-parser');
 const verifyToken = require('../jwtconfig');
 const bodyParser = body.urlencoded({ extended: false })
@@ -20,25 +20,25 @@ router.get('/forgotpass', (req, res) => {
 })
 //Here we are generating the otp and sending it through nodemailer
 router.post('/otp', bodyParser, Otpgen)
-
+router.get('/register',registerForm)
 router.get('/admin/data', getDashboard)
 router.get('/admin/form', getForm)
 router.post('/admin/savedata', bodyParser, getPostdata)
 // router.post('/checkLogin',bodyParser,checkUserData)
-// router.post('/checkLogin',bodyParser,checkLoginData)
+router.post('/checkLogin',bodyParser,checkLoginData)
 
-router.post(
-  "/checkLogin",
-  passport.authenticate("local", {
-    successRedirect: "/admin/data",
-    failureRedirect: "/test",
-  }),
+// router.post(
+//   "/checkLogin",
+//   passport.authenticate("local", {
+//     successRedirect: "/admin/data",
+//     failureRedirect: "/test",
+//   }),
   
-   async (req, res) => {
-    console.log(req.body)
-    res.send("done");
-  }
-);
+//    async (req, res) => {
+//     console.log(req.body)
+//     res.send("done");
+//   }
+// );
 // router.post('/checkLogin', passport.authenticate('local', {
 //     successRedirect: '/admin/data',
 //     failureRedirect: '/',
@@ -58,7 +58,7 @@ router.post('/edittcat/:id',bodyParser,editcat)
 router.post('/savesubcat',bodyParser,savesubcat)
 // router.get('/showsubcat',getsubdata)
 router.get('/admin/subcatform',getsubcatform)
-router.get('/showsubcat/:id',editsubcat)
+router.get('/showsubcat/:id',verifyToken,editsubcat)
 router.post('/updatesubcat/:id',updatesubcat)
 router.get('/deletesubcat/:id',delsubcat)
 router.get('/getData',getData)
@@ -69,11 +69,11 @@ router.get('/admin/productform',getproduct)
 router.post('/admin/productform',saveproduct)
 
 //roles:
-router.get('/admin/roleForm',roleData)
+router.get('/admin/roleForm',checkRole,roleData)
 router.post('/admin/roleForm',saverole)
 router.get('/admin/delrole/:id',deleteRoleData)
 router.get('/admin/editrole/:id',editRoleData)
-
+router.post('/updateRole/:id',updaterole)
 
 
 module.exports = router;

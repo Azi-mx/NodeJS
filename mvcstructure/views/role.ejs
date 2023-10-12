@@ -35,14 +35,12 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <!-- <% console.log('editrole:', editrole); %> 
-              <% console.log('editrole.name:', editrole.name); %> -->
               
-              <form action="<% if (editrole) { %>/edittcat/<%= editrole._id %><% } else { %>/admin/roleForm<% } %>" method="post" name="frm">
+              <form action="<% if (editrole) { %>/updateRole/<%= editrole._id %><% } else { %>/admin/roleForm<% } %>" method="post" name="frm">
                 <div class="card-body">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Role Name</label>
-                    <input type="text" name="rolename" class="form-control" id="exampleInputEmail1" value="<%=(!editrole)?'':editrole.name%>" placeholder="Enter Category Name">
+                    <input type="text" name="rolename" class="form-control" id="exampleInputEmail1" value="<%=(!editrole)?'':editrole.role_name%>" placeholder="Enter Category Name">
                   </div> 
                 </div>
                 <!-- /.card-body -->

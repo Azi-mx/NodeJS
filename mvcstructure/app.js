@@ -4,6 +4,8 @@ const flash = require('connect-flash')
 const cookie = require('cookie-parser');
 const app = express();
 const http = require('http');
+var LocalStorage = require('node-localstorage').LocalStorage,
+    localStorage = new LocalStorage('./scratch');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -68,6 +70,7 @@ app.get('/chat', (req, res) => {
 
 app.get('/logout',(req,res)=>{
     res.clearCookie('Username')
+    localStorage.clear()
     res.redirect('/')
 })
 

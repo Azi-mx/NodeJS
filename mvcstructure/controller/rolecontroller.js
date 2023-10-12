@@ -1,7 +1,8 @@
 const rolemodel = require('../model/role')
 const express = require('express');
    
-
+var LocalStorage = require('node-localstorage').LocalStorage,
+localStorage = new LocalStorage('./scratch');
 
 const app = express();
 // const bodyParser = require('body-parser');
@@ -19,7 +20,7 @@ const roleData =async (req,res)=>{
 const saverole = async (req,res)=>{
     let getAllRole = await rolemodel.find();
     const rolename = req.body.rolename;
-    const checkName = await rolemodel.findOne({rolename:rolename})
+    const checkName = await rolemodel.findOne({role_name:rolename})
     
     if(checkName){       
             req.flash('success', 'role already exists');
@@ -92,5 +93,13 @@ const updaterole = async (req,res)=>{
     }
 
 }
+const checkRole = async (req, res,next)=>{
+    let role = JSON.parse(localStorage.getItem('userRole'));
+    if(role=="Admin"){
+        next();
+    } else {
+        res.redirect('/admin/data')
+    }
+}
 
-module.exports = {roleData,saverole,deleteRoleData,editRoleData,updaterole};
+module.exports = {roleData,saverole,deleteRoleData,editRoleData,updaterole,checkRole};
