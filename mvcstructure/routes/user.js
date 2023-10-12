@@ -19,10 +19,11 @@ router.get('/forgotpass', (req, res) => {
     res.render('forgotform')
 })
 //Here we are generating the otp and sending it through nodemailer
+
+//user
 router.post('/otp', bodyParser, Otpgen)
 router.get('/register',registerForm)
-router.get('/admin/data', getDashboard)
-router.get('/admin/form', getForm)
+router.get('/admin/data',verifyToken, getDashboard)
 router.post('/admin/savedata', bodyParser, getPostdata)
 // router.post('/checkLogin',bodyParser,checkUserData)
 router.post('/checkLogin',bodyParser,checkLoginData)
@@ -48,7 +49,7 @@ router.post('/checkLogin',bodyParser,checkLoginData)
 
 router.post('/otpverify', bodyParser, otpverify)
 router.post('/changePass', bodyParser, changePass)
-
+router.get('/admin/form',verifyToken,checkRole, getForm)
 router.post('/savecat', bodyParser,savecat)
 router.get('/delcat/:id',delcat)
 router.get('/editcat/:id',showcat)
