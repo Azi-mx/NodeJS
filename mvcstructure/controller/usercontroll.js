@@ -46,17 +46,18 @@ const getForm = async (req, res) => {
 
 //This is to register user 
 const getPostdata = async (req, res) => {
-    const { username, email, password,role_id  } = req.body;
-    let checkuser = await userModel.findOne({ email })
-    const checkuserrole = await userModel.findOne({ role_id }).populate('role_id');
-    let roleData = await rolemodel.find({isActive:1});
-    
+    const { username, email, password, role_id } = req.body;
+    let roleData = await rolemodel.find({ isActive: 1 });
+
+
     if (email && username && password) {
+        let checkuser = await userModel.findOne({ email })
+        const checkuserrole = await userModel.findOne({ role_id }).populate('role_id');
 
         if (checkuserrole) {
             if (checkuserrole.role_id.role_name == 'Admin') {
                 req.flash('info', 'Admin is already registered!');
-                res.render('register', { message2: req.flash('info'), roleData: roleData });
+                res.render('register', { message: req.flash('info'), roleData: roleData });
             } else if (checkuserrole.role_id.role_name == 'Manager') {
                 const checkmanager = await userModel.find({ role_id });
                 if (checkmanager.length == 2) {
@@ -131,11 +132,11 @@ const getPostdata = async (req, res) => {
             res.render('login', { message: req.flash('info') })
         }
     }
-        else {
-            req.flash('success', 'Please enter your name, email address and password')
-            res.render('register', { message: req.flash('success'), roleData: roleData });
-        }
+    else {
+        req.flash('success', 'Please enter your name, email address and password')
+        res.render('register', { message: req.flash('success'), roleData: roleData });
     }
+}
 
 
 

@@ -3,20 +3,21 @@ const flash = require('connect-flash')
 
 const cookie = require('cookie-parser');
 const app = express();
-const http = require('http');
 var LocalStorage = require('node-localstorage').LocalStorage,
     localStorage = new LocalStorage('./scratch');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const session = require('express-session');
+const router = require('./routes/user');
 
 const passport = require('passport')
+
 const localization = require("./middleware/localauth");
 app.use(session({
   secret: 'testSecret',
-  resave: false,
-  saveUninitialized: false,
+  resave: true,
+  saveUninitialized: true,
   // store: new MongoStore({ mongooseConnection: mongoose.connection }),
 }));
 localization(passport)
@@ -46,7 +47,6 @@ io.on('connection', socket => {
 
 
 app.use(cookie())
-const router = require('./routes/user');
 
 
 app.use(flash())
