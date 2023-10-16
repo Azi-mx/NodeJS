@@ -51,7 +51,7 @@ const getPostdata = async (req, res) => {
 
 
     if (email && username && password) {
-        let checkuser = await userModel.findOne({ email })
+        let checkuser = await userModel.findOne({email: { $regex: new RegExp(email, 'i') } })
         const checkuserrole = await userModel.findOne({ role_id }).populate('role_id');
 
         if (checkuserrole) {
