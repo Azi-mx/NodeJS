@@ -89,7 +89,7 @@ const signupdetails = async (req, res) => {
         }
     }
     else {
-        req.flash('success', 'Please enter your name, email address and password')
+        req.flash('success', 'Please enter your name, email address and select your role')
         res.render('logindetails', { message: req.flash('success'), roleData: roleData });
     }
 }

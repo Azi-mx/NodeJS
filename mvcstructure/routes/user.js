@@ -29,7 +29,7 @@ router.post('/otp', bodyParser, Otpgen)
 router.get('/register', registerForm)
 
 // async ()=>(await userModel.googleId)?router.get('/admin/data',verifyToken, getDashboard) : router.get('/admin/data', getDashboard)
-router.get('/admin/data', getDashboard)
+router.get('/admin/data',verifyToken, getDashboard)
 
 
 router.post('/admin/savedata', bodyParser, getPostdata)

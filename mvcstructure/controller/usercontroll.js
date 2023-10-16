@@ -157,31 +157,40 @@ const getPostdata = async (req, res) => {
 // };
 
 const checkLoginData = async (req, res) => {
-    let user = await userModel.findOne({ email: req.body.username })
+    const username = req.body.username;
+    const password = req.body.password;
 
-    if (!req.body.email && !req.body.password) {
+    if (!username || !password) {
         req.flash('danger', 'Please Enter Email and Password');
-        res.render('login', { message: req.flash('danger') });
-    } else {
-        if (!user) {
-            req.flash('danger', 'Email is not registered! Please Register First!');
-            res.render('login', { message: req.flash('danger') });
-        } else {
-            const isPasswordValid = await bcrypt.compare(req.body.password, user.password)
-            if (!isPasswordValid) {
-                req.flash('danger', 'Email or password wrong!')
-                res.render('login', { message: req.flash('danger') });
-            }
-            else {
-                res.cookie('Username', user.name);
-                res.render('index', { username: req.cookies.Username })
-                localStorage.setItem('userToken', JSON.stringify(user.token));
-                localStorage.setItem('rolename', JSON.stringify(user.role_id));
-
-            }
-        }
+        return res.render('login', { message: req.flash('danger') });
     }
+
+    let user = await userModel.findOne({
+        $or: [
+            { email: { $regex: new RegExp(username, 'i') } },
+            { name: { $regex: new RegExp(username, 'i') } }
+        ]
+    });
+
+    if (!user) {
+        req.flash('danger', 'Email is not registered! Please Register First!');
+        return res.render('login', { message: req.flash('danger') });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+        req.flash('danger', 'Email or password is wrong!');
+        return res.render('login', { message: req.flash('danger') });
+    }
+
+    res.cookie('Username', user.name);
+    res.render('index', { username: req.cookies.Username });
+    localStorage.setItem('userToken', JSON.stringify(user.token));
+    localStorage.setItem('rolename', JSON.stringify(user.role_id));
 }
+
+
 
 //Otp generating function 
 function generateOTP() {
