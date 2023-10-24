@@ -70,7 +70,7 @@ const getPostdata = async (req, res) => {
                         to: email,
                         subject: 'Testing the nodemailer',
                         text: "The email is succesfully recieved",
-                        html: '<p>This is a p tag</p>'
+                        html: `<p>Hello ${username} to Azim's Admin Panel</p>`
                     }
                     const crypted = await bcrypt.hash(password, saltrounds)
                     let user = await userModel.find()

@@ -11,6 +11,7 @@ const { savesubcat, getsubcatform, editsubcat, updatesubcat, delsubcat, getData,
 const { getproduct, saveproduct } = require('../controller/productcontroller')
 
 const { roleData, saverole, deleteRoleData, editRoleData, updaterole, checkRole } = require('../controller/rolecontroller')
+const getPDF = require('../controller/pdfcontroller')
 const signupdetails = require('../controller/googlecontroller')
 const body = require('body-parser');
 const verifyToken = require('../jwtconfig');
@@ -31,11 +32,10 @@ router.get('/register', registerForm)
 // async ()=>(await userModel.googleId)?router.get('/admin/data',verifyToken, getDashboard) : router.get('/admin/data', getDashboard)
 router.get('/admin/data',verifyToken, getDashboard)
 
-
 router.post('/admin/savedata', bodyParser, getPostdata)
 // router.post('/checkLogin',bodyParser,checkUserData)
 router.post('/checkLogin', bodyParser, checkLoginData)
-
+router.get('/getpdf',bodyParser,getPDF)
 // router.post(
 //   "/checkLogin",
 //   passport.authenticate("local", {

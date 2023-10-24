@@ -55,7 +55,6 @@ const signupdetails = async (req, res) => {
                     req.flash('info', 'You Have been registered Succesfully')
                     // res.render('login', { message: req.flash('info') })
                     res.redirect('/admin/data')
-
                 }
 
             }
